@@ -1,0 +1,748 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7513429A2D02E00E00E6E6A2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 751342992D02E00E00E6E6A2 /* README.md */; };
+		754184B62D0E0D850069F31B /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 754184B52D0E0D850069F31B /* Zip */; };
+		754184B82D0E0DB80069F31B /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 754184B72D0E0DB80069F31B /* Zip */; };
+		75AEBA612CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75AEB9F72CE9F16800E275FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75AEB9DB2CE9F16600E275FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75AEB9E22CE9F16600E275FB;
+			remoteInfo = V2rayX;
+		};
+		75AEBA012CE9F16800E275FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75AEB9DB2CE9F16600E275FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75AEB9E22CE9F16600E275FB;
+			remoteInfo = V2rayX;
+		};
+		75AEBA5F2CEA0E5B00E275FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75AEB9DB2CE9F16600E275FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75AEBA542CEA0E5B00E275FB;
+			remoteInfo = "V2rayX-CoreRunner";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		75AEBA502CEA0E0A00E275FB /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				75AEBA612CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		751342992D02E00E00E6E6A2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		75AEB9E32CE9F16600E275FB /* V2rayX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2rayX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2rayXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75AEBA002CE9F16800E275FB /* V2rayXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2rayXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = "V2rayX-CoreRunner.xpc"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		75AEBA622CEA0E5B00E275FB /* Exceptions for "V2rayX-CoreRunner" folder in "V2rayX-CoreRunner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		75AEB9E52CE9F16600E275FB /* V2rayX */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = V2rayX;
+			sourceTree = "<group>";
+		};
+		75AEB9F92CE9F16800E275FB /* V2rayXTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = V2rayXTests;
+			sourceTree = "<group>";
+		};
+		75AEBA032CE9F16800E275FB /* V2rayXUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = V2rayXUITests;
+			sourceTree = "<group>";
+		};
+		75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				75AEBA622CEA0E5B00E275FB /* Exceptions for "V2rayX-CoreRunner" folder in "V2rayX-CoreRunner" target */,
+			);
+			path = "V2rayX-CoreRunner";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		75AEB9E02CE9F16600E275FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				754184B82D0E0DB80069F31B /* Zip in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9F32CE9F16800E275FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				754184B62D0E0D850069F31B /* Zip in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9FD2CE9F16800E275FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEBA522CEA0E5B00E275FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		754184B42D0E0D850069F31B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		75AEB9DA2CE9F16600E275FB = {
+			isa = PBXGroup;
+			children = (
+				751342992D02E00E00E6E6A2 /* README.md */,
+				75AEB9E52CE9F16600E275FB /* V2rayX */,
+				75AEB9F92CE9F16800E275FB /* V2rayXTests */,
+				75AEBA032CE9F16800E275FB /* V2rayXUITests */,
+				75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */,
+				754184B42D0E0D850069F31B /* Frameworks */,
+				75AEB9E42CE9F16600E275FB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		75AEB9E42CE9F16600E275FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75AEB9E32CE9F16600E275FB /* V2rayX.app */,
+				75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */,
+				75AEBA002CE9F16800E275FB /* V2rayXUITests.xctest */,
+				75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		75AEB9E22CE9F16600E275FB /* V2rayX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75AEBA0A2CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayX" */;
+			buildPhases = (
+				75AEB9DF2CE9F16600E275FB /* Sources */,
+				75AEB9E02CE9F16600E275FB /* Frameworks */,
+				75AEB9E12CE9F16600E275FB /* Resources */,
+				75AEBA502CEA0E0A00E275FB /* Embed XPC Services */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75AEBA602CEA0E5B00E275FB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				75AEB9E52CE9F16600E275FB /* V2rayX */,
+			);
+			name = V2rayX;
+			packageProductDependencies = (
+				754184B72D0E0DB80069F31B /* Zip */,
+			);
+			productName = V2rayX;
+			productReference = 75AEB9E32CE9F16600E275FB /* V2rayX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		75AEB9F52CE9F16800E275FB /* V2rayXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75AEBA0D2CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayXTests" */;
+			buildPhases = (
+				75AEB9F22CE9F16800E275FB /* Sources */,
+				75AEB9F32CE9F16800E275FB /* Frameworks */,
+				75AEB9F42CE9F16800E275FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75AEB9F82CE9F16800E275FB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				75AEB9F92CE9F16800E275FB /* V2rayXTests */,
+			);
+			name = V2rayXTests;
+			packageProductDependencies = (
+				754184B52D0E0D850069F31B /* Zip */,
+			);
+			productName = V2rayXTests;
+			productReference = 75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		75AEB9FF2CE9F16800E275FB /* V2rayXUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75AEBA102CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayXUITests" */;
+			buildPhases = (
+				75AEB9FC2CE9F16800E275FB /* Sources */,
+				75AEB9FD2CE9F16800E275FB /* Frameworks */,
+				75AEB9FE2CE9F16800E275FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75AEBA022CE9F16800E275FB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				75AEBA032CE9F16800E275FB /* V2rayXUITests */,
+			);
+			name = V2rayXUITests;
+			packageProductDependencies = (
+			);
+			productName = V2rayXUITests;
+			productReference = 75AEBA002CE9F16800E275FB /* V2rayXUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75AEBA632CEA0E5B00E275FB /* Build configuration list for PBXNativeTarget "V2rayX-CoreRunner" */;
+			buildPhases = (
+				75AEBA512CEA0E5B00E275FB /* Sources */,
+				75AEBA522CEA0E5B00E275FB /* Frameworks */,
+				75AEBA532CEA0E5B00E275FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */,
+			);
+			name = "V2rayX-CoreRunner";
+			packageProductDependencies = (
+			);
+			productName = "V2rayX-CoreRunner";
+			productReference = 75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75AEB9DB2CE9F16600E275FB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					75AEB9E22CE9F16600E275FB = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					75AEB9F52CE9F16800E275FB = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 75AEB9E22CE9F16600E275FB;
+					};
+					75AEB9FF2CE9F16800E275FB = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 75AEB9E22CE9F16600E275FB;
+					};
+					75AEBA542CEA0E5B00E275FB = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 75AEB9DE2CE9F16600E275FB /* Build configuration list for PBXProject "V2rayX" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 75AEB9DA2CE9F16600E275FB;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 75AEB9E42CE9F16600E275FB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				75AEB9E22CE9F16600E275FB /* V2rayX */,
+				75AEB9F52CE9F16800E275FB /* V2rayXTests */,
+				75AEB9FF2CE9F16800E275FB /* V2rayXUITests */,
+				75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		75AEB9E12CE9F16600E275FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7513429A2D02E00E00E6E6A2 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9F42CE9F16800E275FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9FE2CE9F16800E275FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEBA532CEA0E5B00E275FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		75AEB9DF2CE9F16600E275FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9F22CE9F16800E275FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEB9FC2CE9F16800E275FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75AEBA512CEA0E5B00E275FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75AEB9F82CE9F16800E275FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75AEB9E22CE9F16600E275FB /* V2rayX */;
+			targetProxy = 75AEB9F72CE9F16800E275FB /* PBXContainerItemProxy */;
+		};
+		75AEBA022CE9F16800E275FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75AEB9E22CE9F16600E275FB /* V2rayX */;
+			targetProxy = 75AEBA012CE9F16800E275FB /* PBXContainerItemProxy */;
+		};
+		75AEBA602CEA0E5B00E275FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */;
+			targetProxy = 75AEBA5F2CEA0E5B00E275FB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		75AEBA082CE9F16800E275FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		75AEBA092CE9F16800E275FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		75AEBA0B2CE9F16800E275FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "V2rayX/Support Files/V2rayX.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"V2rayX/Support Files/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.istomyang.V2rayX.debug;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		75AEBA0C2CE9F16800E275FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "V2rayX/Support Files/V2rayX.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"V2rayX/Support Files/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.istomyang.V2rayX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		75AEBA0E2CE9F16800E275FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = istomyang.com.V2rayXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/V2rayX.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/V2rayX";
+			};
+			name = Debug;
+		};
+		75AEBA0F2CE9F16800E275FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = istomyang.com.V2rayXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/V2rayX.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/V2rayX";
+			};
+			name = Release;
+		};
+		75AEBA112CE9F16800E275FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = istomyang.com.V2rayXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = V2rayX;
+			};
+			name = Debug;
+		};
+		75AEBA122CE9F16800E275FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = istomyang.com.V2rayXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = V2rayX;
+			};
+			name = Release;
+		};
+		75AEBA642CEA0E5B00E275FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "V2rayX-CoreRunner/V2rayX_CoreRunner.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "V2rayX-CoreRunner/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "V2rayX-CoreRunner";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.istomyang.V2rayX-CoreRunner.debug";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		75AEBA652CEA0E5B00E275FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "V2rayX-CoreRunner/V2rayX_CoreRunner.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "V2rayX-CoreRunner/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "V2rayX-CoreRunner";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.istomyang.V2rayX-CoreRunner";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		75AEB9DE2CE9F16600E275FB /* Build configuration list for PBXProject "V2rayX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75AEBA082CE9F16800E275FB /* Debug */,
+				75AEBA092CE9F16800E275FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75AEBA0A2CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75AEBA0B2CE9F16800E275FB /* Debug */,
+				75AEBA0C2CE9F16800E275FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75AEBA0D2CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75AEBA0E2CE9F16800E275FB /* Debug */,
+				75AEBA0F2CE9F16800E275FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75AEBA102CE9F16800E275FB /* Build configuration list for PBXNativeTarget "V2rayXUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75AEBA112CE9F16800E275FB /* Debug */,
+				75AEBA122CE9F16800E275FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75AEBA632CEA0E5B00E275FB /* Build configuration list for PBXNativeTarget "V2rayX-CoreRunner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75AEBA642CEA0E5B00E275FB /* Debug */,
+				75AEBA652CEA0E5B00E275FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		754184B52D0E0D850069F31B /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+		754184B72D0E0DB80069F31B /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 75AEB9DB2CE9F16600E275FB /* Project object */;
+}
