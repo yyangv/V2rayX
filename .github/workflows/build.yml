@@ -1,0 +1,57 @@
+name: Build macOS App and Upload to Release
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - run: |
+          uname -m
+          
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Xcode for building the app
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      # Cache derived data and dependencies
+      - name: Cache derived data
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-build-${{ hashFiles('**/*.xcodeproj') }}
+          restore-keys: ${{ runner.os }}-build
+
+      # Build macOS application for multiple architectures
+      - name: Build macOS app
+        run: |
+          for arch in x86_64 arm64; do
+            echo "Building for architecture: $arch"
+            xcodebuild -project V2rayX.xcodeproj -scheme V2rayX -configuration Release -sdk macosx -arch $arch -derivedDataPath $GITHUB_WORKSPACE/build/$arch
+            xcodebuild -project V2rayX.xcodeproj -scheme V2rayX-CoreRunner -configuration Release -sdk macosx -arch $arch -derivedDataPath $GITHUB_WORKSPACE/build/$arch
+            cd build/$arch/Build/Products/Release && zip -r V2rayX_$arch.zip V2rayX.app/ && cd -
+          done
+
+      # Upload the .app bundle to GitHub Releases
+      - name: Upload to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: |
+            build/x86_64/Build/Products/Release/V2rayX_x86_64.zip,
+            build/arm64/Build/Products/Release/V2rayX_arm64.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
