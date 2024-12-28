@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75061D512D24DFCA00AC7091 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 75061D502D24DFCA00AC7091 /* Resources */; };
 		7513429A2D02E00E00E6E6A2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 751342992D02E00E00E6E6A2 /* README.md */; };
-		754184B62D0E0D850069F31B /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 754184B52D0E0D850069F31B /* Zip */; };
-		754184B82D0E0DB80069F31B /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 754184B72D0E0DB80069F31B /* Zip */; };
 		75AEBA612CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -52,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		75061D502D24DFCA00AC7091 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		751342992D02E00E00E6E6A2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		75AEB9E32CE9F16600E275FB /* V2rayX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2rayX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2rayXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				754184B82D0E0DB80069F31B /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +107,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				754184B62D0E0D850069F31B /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,23 +127,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		754184B42D0E0D850069F31B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		75AEB9DA2CE9F16600E275FB = {
 			isa = PBXGroup;
 			children = (
-				751342992D02E00E00E6E6A2 /* README.md */,
 				75AEB9E52CE9F16600E275FB /* V2rayX */,
 				75AEB9F92CE9F16800E275FB /* V2rayXTests */,
 				75AEBA032CE9F16800E275FB /* V2rayXUITests */,
 				75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */,
-				754184B42D0E0D850069F31B /* Frameworks */,
 				75AEB9E42CE9F16600E275FB /* Products */,
+				751342992D02E00E00E6E6A2 /* README.md */,
+				75061D502D24DFCA00AC7091 /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,7 +173,6 @@
 			);
 			name = V2rayX;
 			packageProductDependencies = (
-				754184B72D0E0DB80069F31B /* Zip */,
 			);
 			productName = V2rayX;
 			productReference = 75AEB9E32CE9F16600E275FB /* V2rayX.app */;
@@ -206,7 +196,6 @@
 			);
 			name = V2rayXTests;
 			packageProductDependencies = (
-				754184B52D0E0D850069F31B /* Zip */,
 			);
 			productName = V2rayXTests;
 			productReference = 75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */;
@@ -293,7 +282,6 @@
 			mainGroup = 75AEB9DA2CE9F16600E275FB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75AEB9E42CE9F16600E275FB /* Products */;
@@ -313,6 +301,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75061D512D24DFCA00AC7091 /* Resources in Resources */,
 				7513429A2D02E00E00E6E6A2 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,7 +517,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.istomyang.V2rayX.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -556,7 +545,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.istomyang.V2rayX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -719,30 +708,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/marmelroy/Zip.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		754184B52D0E0D850069F31B /* Zip */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */;
-			productName = Zip;
-		};
-		754184B72D0E0DB80069F31B /* Zip */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 754184B32D0E0CFD0069F31B /* XCRemoteSwiftPackageReference "Zip" */;
-			productName = Zip;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 75AEB9DB2CE9F16600E275FB /* Project object */;
 }

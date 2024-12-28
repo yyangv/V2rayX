@@ -7,46 +7,12 @@
 
 import Foundation
 
-
 // MARK: - Constants
 
-let SANDBOX = false
+let OutboundProxyTag = XrayConfigBuilder.kOutboundProxyTag
+let OutboundDirectTag = XrayConfigBuilder.kOutboundDirectTag
+let OutboundRejectTag = XrayConfigBuilder.kOutboundRejectTag
 
-let STULaunchLogin = "U/LaunchLogin"
-let STUActiveCore = "U/ActiveCore" // path
-let STUActiveNode = "U/ActiveNode" // link
-let STURoutingRules = "U/RoutingRules" // String, [UserRoutingRule]
-let STUSubscriptionURL = "U/SubscriptionURL"
-let STUSubscriptionLinks = "U/SubscriptionLinks" // [Link]
-let STUHomePath = "U/HomePath" // disable in SANBOX
-
-let STCInboundPortHTTP = "C/Inbound/PortHTTP"
-let STCInboundPortSOCKS = "C/Inbound/PortSOCKS"
-let STCInboundAllowLAN = "C/Inbound/AllowLAN"
-
-let STCDNSHosts = "C/DNS/Hosts"
-let STCDNSDirectIp = "C/DNS/DirectIp"
-let STCDNSProxyIp = "C/DNS/ProxyIp"
-let STCDNSEnableFakeDNS = "C/DNS/EnableFakeDNS"
-
-let STCOutboundEnableMux = "C/Outbound/EnableMux"
-let STCOutboundMuxConcurrency = "C/Outbound/MuxConcurrency"
-let STCOutboundMuxXudpConcurrency = "C/Outbound/MuxXudpConcurrency"
-let STCOutboundMuxXudpProxyUDP443 = "C/Outbound/MuxXudpProxyUDP443"
-
-let STCLogEnableAccess = "C/Log/EnableAccess"
-let STCLogEnableError = "C/Log/EnableError"
-let STCLogLevel = "C/Log/Level"
-let STCLogEnableDNS = "C/Log/EnableDNS"
-let STCLogEnableMaskAddress = "C/Log/EnableMaskAddress"
-
-let STCRoutingDomainStrategy = "C/Routing/DomainStrategy"
-
-let STCStatsEnable = "C/Stats/Enable"
-
-let OutboundProxyTag = CoreDomain.kOutboundProxyTag
-let OutboundDirectTag = CoreDomain.kOutboundDirectTag
-let OutboundRejectTag = CoreDomain.kOutboundRejectTag
 
 // MARK: - Error
 
@@ -68,12 +34,30 @@ extension Error {
     }
 }
 
-// MARK: - Utils
+// MARK: - Extension
 
-func jsonEncode<T: Encodable>(_ a: T ,formatting: JSONEncoder.OutputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]) -> String {
+extension Int {
+    var string: String {
+        return String(self)
+    }
+}
+
+extension String {
+    var int: Int {
+        return Int(self) ?? -1
+    }
+}
+
+// MARK: - Coder
+
+func jsonEncodeData<T: Encodable>(_ a: T ,formatting: JSONEncoder.OutputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]) -> Data {
     let encoder = JSONEncoder()
     encoder.outputFormatting = formatting
-    let data = try! encoder.encode(a)
+    return try! encoder.encode(a)
+}
+
+func jsonEncode<T: Encodable>(_ a: T , formatting: JSONEncoder.OutputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]) -> String {
+    let data = jsonEncodeData(a, formatting: formatting)
     return String(data: data, encoding: .utf8)!
 }
 
@@ -202,12 +186,22 @@ enum JSON: Codable {
         case .array(let arrayVal):
             try container.encode(arrayVal)
         case .dict(let dictVal):
-            try container.encode(dictVal.filter { $0.value != nil })
+            var newDict: [String: JSON] = [:]
+            for (key, val) in dictVal {
+                if val == nil {
+                    continue
+                }
+                if case .array(let arr) = val {
+                    if arr.isEmpty {
+                        continue
+                    }
+                }
+                newDict[key] = val!
+            }
+            try container.encode(newDict)
         }
     }
 }
-
-// MARK: - Extension
 
 extension String {
     var json: JSON { .string(self) }
@@ -226,8 +220,7 @@ extension Double {
 }
 
 extension Array {
-    var json: JSON? {
-        if self.count == 0 { return nil }
+    var json: JSON {
         switch self {
         case let a as [String]:
             return .array(a.map { $0.json })
@@ -237,33 +230,14 @@ extension Array {
             return .array(a.map { $0.json })
         case let a as [Double]:
             return .array(a.map { $0.json })
-        case let a as [JSON]:
-            return .array(a)
         default:
-            return nil
+            return .array(self as! [JSON])
         }
     }
 }
 
 extension Dictionary {
-    var json: JSON? {
-        switch self {
-        case let a as [String: JSON?]:
-            return .dict(a)
-        default:
-            return nil
-        }
-    }
-}
-
-extension Int {
-    var string: String {
-        return String(self)
-    }
-}
-
-extension String {
-    var int: Int {
-        return Int(self) ?? -1
+    var json: JSON {
+        return .dict(self as! [String: JSON?])
     }
 }

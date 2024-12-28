@@ -6,84 +6,53 @@
 //
 
 import SwiftUI
-import ServiceManagement
 
 @main
 struct V2rayXApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @Environment(\.dismissWindow) private var dismissWindow
+    @State private var settingModel = SettingModel()
     
     var body: some Scene {
-        WindowGroup(id: "main") {
-            MainView().onAppear {
-                dismissWindow(id: "main")
-            }
-            .frame(width: 300, height: 300, alignment: .center)
+        MenuBarExtra {
+            PopoverContentView()
+                .environment(settingModel)
+        } label: {
+            Image(nsImage: menuBarImage())
+        }
+        .menuBarExtraStyle(.window)
+        
+        Window("Main", id: "main") {
+            MainContentView()
+                .frame(width: 300, height: 300, alignment: .center)
         }
         
-        WindowGroup(id: "settings") {
+        Window("Setting", id: "settings") {
             SettingContentView()
-                .onAppear {
-                    NSApplication.shared.setActivationPolicy(.regular)
-                }
-                .onDisappear {
-                    NSApplication.shared.setActivationPolicy(.accessory)
-                }
+                .environment(settingModel)
         }
-        
-//        Settings {
-//            EmptyView()
-//        }
+    }
+    
+    private func menuBarImage() -> NSImage {
+        let config = NSImage.SymbolConfiguration(pointSize: 16, weight: .regular, scale: .medium)
+        let image = NSImage(systemSymbolName: "v.square.fill", accessibilityDescription: nil)!.withSymbolConfiguration(config)!
+        image.isTemplate = true
+        return image
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApplication.shared.setActivationPolicy(.accessory)
-        
-        // install stage
-        SettingViewModel.shared.install()
-        
-        // register PopoverWindow in Status Bar.
-        self.registerPopover()
-        
-        debugPrint("====>", URL.homeDirectory)
+//        clearUserDefaults()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
         // Clean up code here
-        UtilsDomain.shared.restoreSystemProxy()
+        Utils.shared.restoreSystemProxy()
     }
     
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
-    }
-    
-    var statusItem: NSStatusItem!
-    var popover: NSPopover!
-    
-    func registerPopover() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "v.square.fill", accessibilityDescription: nil)!
-                .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 16, weight: .regular, scale: .medium))
-            button.image!.isTemplate = true
-            button.action = #selector(togglePopover(_:))
-        }
-        popover = NSPopover()
-        popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: PopoverContentView())
-    }
-    
-    @objc private func togglePopover(_ sender: Any) {
-        if popover.isShown {
-            popover.performClose(sender)
-        } else {
-            if let button = statusItem.button {
-                popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxY)
-            }
-        }
     }
     
     private func clearUserDefaults() {
