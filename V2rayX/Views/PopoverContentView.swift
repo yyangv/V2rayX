@@ -106,7 +106,7 @@ struct PopoverContentView: View {
             
             // Open Main Scene
             Button {
-                openWindow(id: "main")
+                openWindowAndActive(id: "Main")
             } label: {
                 Image(systemName: "macwindow")
                     .imageScale(.large)
@@ -115,7 +115,7 @@ struct PopoverContentView: View {
             
             // Open Preference Scene
             Button {
-                openWindow(id: "settings")
+                openWindowAndActive(id: "Setting")
             } label: {
                 Image(systemName: "gearshape.fill")
                     .imageScale(.large)
@@ -215,6 +215,12 @@ struct PopoverContentView: View {
     
     private func terminalApp() {
         NSApplication.shared.terminate(nil)
+    }
+    
+    private func openWindowAndActive(id: String) {
+        openWindow(id: id)
+        // I think making main window to order front can resolve other windows order front correctly.
+        NSApp.windows[1].makeKeyAndOrderFront(nil)
     }
     
     private func syncSubscription(_ cb: @escaping (Error?)->Void) {

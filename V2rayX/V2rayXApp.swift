@@ -22,12 +22,12 @@ struct V2rayXApp: App {
         }
         .menuBarExtraStyle(.window)
         
-        Window("Main", id: "main") {
+        Window("Main", id: "Main") {
             MainContentView()
                 .frame(width: 300, height: 300, alignment: .center)
         }
         
-        Window("Setting", id: "settings") {
+        Window("Setting", id: "Setting") {
             SettingContentView()
                 .environment(settingModel)
         }

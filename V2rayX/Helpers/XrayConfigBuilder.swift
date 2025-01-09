@@ -571,7 +571,7 @@ fileprivate func build_tp_kcp(_ json: inout JSON, params: [String: String]) {
 }
 
 fileprivate func build_tp_tcp(_ json: inout JSON, params: [String: String]) {
-    var cfg: [String: JSON] = [
+    let cfg: [String: JSON] = [
         "header": [
             "type": params["headerType"]!.json,
         ].json
