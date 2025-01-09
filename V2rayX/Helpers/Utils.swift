@@ -195,15 +195,15 @@ class Utils {
     
     // MARK: - System Proxy Setting
     
-    private static var preSystemProxy: [SystemProxyInfo] = []
+    private var preSystemProxy: [SystemProxyInfo] = []
     
     func registerSystemProxyWithSave(hh: String, hp: String, sh: String, sp: String) {
-        Utils.preSystemProxy = getSystemProxyInfo()
+        preSystemProxy = getSystemProxyInfo()
         registerSystemProxy(hh: hh, hp: hp, sh: sh, sp: sp)
     }
     
     func restoreSystemProxy() {
-        restoreSystemProxyInfo(Utils.preSystemProxy)
+        restoreSystemProxyInfo(preSystemProxy)
     }
     
     private func registerSystemProxy(hh: String, hp: String, sh: String, sp: String) {
@@ -211,7 +211,7 @@ class Utils {
         getNetworkInterfaces().forEach { network in
             _ = self.runCommand(bin: bin, args: ["-setwebproxy", network, hh, hp])
             _ = self.runCommand(bin: bin, args: ["-setwebproxystate", network, "on"])
-            _ = self.runCommand(bin: bin, args: ["-setsecurewebproxy", network, hh, hp])
+            _ = self.runCommand(bin: bin, args: ["-setsecurewebproxy", network, sh, sp])
             _ = self.runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "on"])
             _ = self.runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, sh, sp])
             _ = self.runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "on"])
@@ -266,7 +266,7 @@ class Utils {
         let lines = raw.split(separator: "\n")
             .filter({ !$0.starts(with: "Authenticated Proxy Enabled") })
         for line in lines {
-            let part = line.split(separator: ": ")
+            let part = line.components(separatedBy: ": ")
             switch part[0] {
             case "Enabled":
                 enabled = part[1] == "Yes"

@@ -28,7 +28,6 @@ class CoreRunner {
     }
 }
 
-
 @objc(_TtC6V2rayXP33_64D1B500EBE4661D27C56256BF1F21E89XPCClient)fileprivate class XPCClient: NSObject, ClientProtocol, NSCoding {
     static var supportsSecureCoding: Bool = true
 
@@ -44,16 +43,22 @@ class CoreRunner {
     
     init(stdout: @escaping (String) -> Void) {
         self.stdout = stdout
-        self.conn = NSXPCConnection(serviceName: "com.istomyang.V2rayX-CoreRunner")
+#if DEBUG
+        let sn = "com.istomyang.V2rayX-CoreRunner.debug"
+        #else
+        let sn = "com.istomyang.V2rayX-CoreRunner"
+#endif
+        let conn = NSXPCConnection(serviceName: sn)
+        self.conn = conn
         super.init()
+        
+        conn.remoteObjectInterface = NSXPCInterface(with: V2rayX_CoreRunnerProtocol.self)
+        conn.exportedInterface = NSXPCInterface(with: ClientProtocol.self)
+        conn.exportedObject = self
+        conn.resume()
     }
     
     func run(command: String, args: [String], cb: @escaping (Error?) -> Void) {
-        conn?.remoteObjectInterface = NSXPCInterface(with: V2rayX_CoreRunnerProtocol.self)
-        conn?.exportedInterface = NSXPCInterface(with: ClientProtocol.self)
-        conn?.exportedObject = self
-        conn?.resume()
-        
         if let proxy = conn?.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
             proxy.run(command: command, args: args) { err in cb(err) }
         }

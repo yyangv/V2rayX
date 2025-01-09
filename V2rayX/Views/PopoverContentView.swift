@@ -43,33 +43,47 @@ struct PopoverContentView: View {
         .frame(width: 300, height: 500)
     }
     
-    @State private var isPlaying: Bool = false
+    @State private var isPlay: Bool = false
     @State private var isRefreshing: Bool = false
     @State private var isTestRTing: Bool = false
     
     private var Toolbar: some View {
         HStack(alignment: .center, spacing: 6) {
             Text("V2rayX")
+                .lineLimit(1)
                 .font(.system(size: 13, weight: .black))
             
             Spacer()
             
             // Start.
             Button {
-                if isPlaying {
+                if isPlay {
                     stop()
-                    isPlaying = false
+                    isPlay = false
                 } else {
-                    start { e in errorOrSucess(e) {
-                        isPlaying = true
-                    }}
+                    isPlay = true
+                    start { e in error(e) }
                 }
             } label: {
                 Image(systemName: "play.circle.fill").imageScale(.large)
-                    .foregroundStyle(isPlaying ? .green : .primary)
+                    .foregroundStyle(isPlay ? .green : .primary)
             }.buttonStyle(PlainButtonStyle())
                 .toolTip("Start running!")
             
+            // Test RT
+            Button {
+                if isTestRTing {
+                    return
+                }
+                isTestRTing = true
+                testResponseTime {
+                    isTestRTing = false
+                }
+            } label: {
+                Image(systemName: "timer.circle.fill").imageScale(.large)
+                    .foregroundStyle(isTestRTing ? .green : .primary)
+            }.buttonStyle(PlainButtonStyle())
+                .toolTip("Ping nodes.")
             
             // Refresh subscribe list.
             Button {
@@ -78,31 +92,15 @@ struct PopoverContentView: View {
                 }
                 isRefreshing = true
                 syncSubscription { e in
-                    defer {
+                    errorOrSucess(e) {
                         isRefreshing = false
                     }
-                    errorOrSucess(e) { }
                 }
             } label: {
                 Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.icloud.fill")
                     .imageScale(.large).foregroundStyle(isRefreshing ? .green : .primary)
             }.buttonStyle(PlainButtonStyle())
                 .toolTip("Update subscribe list.")
-            
-            // Test RT
-            Button {
-                if isTestRTing {
-                    return
-                }
-                isTestRTing = true
-                testconnectivity {
-                    isTestRTing = false
-                }
-            } label: {
-                Image(systemName: "timer.circle.fill").imageScale(.large)
-                    .foregroundStyle(isTestRTing ? .green : .primary)
-            }.buttonStyle(PlainButtonStyle())
-                .toolTip("Ping nodes.")
             
             Divider()
             
@@ -125,7 +123,7 @@ struct PopoverContentView: View {
                 .toolTip("Open preference window.")
             
             Button {
-                NSApplication.shared.terminate(nil)
+                terminalApp()
             } label: {
                 Image(systemName: "power.circle.fill")
                     .imageScale(.large)
@@ -150,9 +148,9 @@ struct PopoverContentView: View {
     
     private func onNodeSelected(_ link: String) {
         settingModel.activeLink = link
-        if isPlaying {
+        if isPlay {
             stop()
-            start { e in errorOrSucess(e) {}}
+            start { e in error(e) }
         }
     }
     
@@ -202,6 +200,8 @@ struct PopoverContentView: View {
                 let hp = m.inPortHttp
                 let sp = m.inPortSocks
                 Utils.shared.registerSystemProxyWithSave(hh: h, hp: hp, sh: h, sp: sp)
+                
+                complete(nil)
             }
         } catch {
             complete(error)
@@ -211,6 +211,10 @@ struct PopoverContentView: View {
     private func stop() {
         CoreRunner.shared.stop()
         Utils.shared.restoreSystemProxy()
+    }
+    
+    private func terminalApp() {
+        NSApplication.shared.terminate(nil)
     }
     
     private func syncSubscription(_ cb: @escaping (Error?)->Void) {
@@ -233,8 +237,13 @@ struct PopoverContentView: View {
         }
     }
     
-    private func testconnectivity(_ complete: @escaping ()->Void) {
+    private func testResponseTime(_ complete: @escaping ()->Void) {
         let links = settingModel.links
+        if links.isEmpty {
+            complete()
+            return
+        }
+        
         var total = 0
         var count = 0
         
@@ -273,6 +282,13 @@ struct PopoverContentView: View {
     }
     
     // MARK: - Utils
+    
+    private func error(_ e: Error?) {
+        if let e = e {
+            errorAlertMessage = e.message
+            errorAlertOpen = true
+        }
+    }
     
     private func errorOrSucess(_ e: Error?, success: ()->Void) {
         if let e = e {
@@ -555,7 +571,7 @@ fileprivate struct TooltipView: NSViewRepresentable {
     typealias NSViewType = NSView
     
     let toolTip: String?
-
+    
     init(_ toolTip: String?) {
         self.toolTip = toolTip
     }

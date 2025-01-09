@@ -195,6 +195,10 @@ class XrayConfigBuilder {
             build_tp_ws(&streamSettings, params: params)
         case "kcp":
             build_tp_kcp(&streamSettings, params: params)
+        case "tcp":
+            build_tp_tcp(&streamSettings, params: params)
+        case "raw":
+            build_tp_tcp(&streamSettings, params: params)
         default:
             throw V2Error("Unsupported transport type: \(transportType)")
         }
@@ -564,6 +568,15 @@ fileprivate func build_tp_kcp(_ json: inout JSON, params: [String: String]) {
     cfg.add(params, "seed")
     
     json["kcpSettings"] = cfg.json
+}
+
+fileprivate func build_tp_tcp(_ json: inout JSON, params: [String: String]) {
+    var cfg: [String: JSON] = [
+        "header": [
+            "type": params["headerType"]!.json,
+        ].json
+    ]
+    json["tcpSettings"] = cfg.json
 }
 
 
