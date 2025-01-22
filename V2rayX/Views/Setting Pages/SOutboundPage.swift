@@ -8,28 +8,31 @@
 import SwiftUI
 
 struct SOutboundPage: View {
-    @Environment(SettingModel.self) private var mo
+    @Environment(\.modCore) private var modCore
+    @Environment(\.modNodes) private var modNodes
     
     var body: some View {
-        @Bindable var m = mo
+        @Bindable var mCore = modCore
+        @Bindable var mNode = modNodes
         Form {
             Section("Subscription") {
-                TextField(text: $m.subscriptionURL, prompt: Text("")) {
+                TextField(text: $mNode.subscriptionLink, prompt: Text("https://.....")) {
                     Text("Subscription URL")
                 }
             }
             
+            
             Section(header: Text("Mux")) {
-                Toggle(isOn: $m.ouEnableMux) {
+                Toggle(isOn: $mCore.ouEnableMux) {
                     Text("Open Mux")
                 }
-                TextField(text: $m.ouMuxConcurrency, prompt: Text("8")) {
+                TextField(text: $mCore.ouMuxConcurrency, prompt: Text("8")) {
                     Text("Concurrency")
                 }
-                TextField(text: $m.ouMuxXudpConcurrency, prompt: Text("16")) {
+                TextField(text: $mCore.ouMuxXudpConcurrency, prompt: Text("16")) {
                     Text("XUDP Concurrency")
                 }
-                TextField(text: $m.ouMuxXudpProxyUDP443, prompt: Text("reject")) {
+                TextField(text: $mCore.ouMuxXudpProxyUDP443, prompt: Text("reject")) {
                     Text("XUDP 443")
                 }
             }

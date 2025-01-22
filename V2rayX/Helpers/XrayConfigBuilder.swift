@@ -2,7 +2,7 @@
 //  XrayConfigBuilder.swift
 //  V2rayX
 //
-//  Created by 杨洋 on 2024/12/27.
+//  Created by 杨洋 on 2025/1/21.
 //
 
 import Foundation
@@ -172,7 +172,7 @@ class XrayConfigBuilder {
             let node = VlessNode(link: link)
             node.build(json: &proxy, params: params)
         default:
-            throw V2Error("Unsupported node protocol: \(nodeProtocol)")
+            throw V2Error.message("Unsupported node protocol: \(nodeProtocol)")
         }
         
         // Transport & Security
@@ -200,7 +200,7 @@ class XrayConfigBuilder {
         case "raw":
             build_tp_tcp(&streamSettings, params: params)
         default:
-            throw V2Error("Unsupported transport type: \(transportType)")
+            throw V2Error.message("Unsupported transport type: \(transportType)")
         }
         
         switch securityType {
@@ -209,7 +209,7 @@ class XrayConfigBuilder {
         case "reality":
             build_ts_reality(&streamSettings, params: params, show: false)
         default:
-            throw V2Error("Unsupported transport security type: \(securityType)")
+            throw V2Error.message("Unsupported transport security type: \(securityType)")
         }
         
         proxy["streamSettings"] = streamSettings
@@ -357,70 +357,71 @@ struct XrayConfig {
     struct Stats {
         let enable: Bool
     }
-}
+    
+    struct RoutingRule: Codable, Hashable {
+        let domainMatcher: String
+        let type: String
+        let domain: [String]?
+        let ip: [String]?
+        let port: String?
+        let sourcePort: String?
+        let network: String?
+        let source: [String]?
+        let inboundTag: String?
+        let `protocol`: [String]?
+        let attrs: [String: String]?
+        let outboundTag: String
+        let balancerTag: String?
+        let ruleTag: String
+        
+        init(ruleTag: String,
+             outboundTag: String,
+             domain: [String]? = nil,
+             ip: [String]? = nil,
+             port: String? = nil,
+             sourcePort: String? = nil,
+             network: String? = nil,
+             source: [String]? = nil,
+             inboundTag: String? = nil,
+             attrs: [String : String]? = nil,
+             balancerTag: String? = nil,
+             `protocol`: [String]? = nil
+        ) {
+            self.domainMatcher = "hybrid"
+            self.type = "field"
+            self.domain = domain
+            self.ip = ip
+            self.port = port
+            self.sourcePort = sourcePort
+            self.network = network
+            self.source = source
+            self.inboundTag = inboundTag
+            self.attrs = attrs
+            self.outboundTag = outboundTag
+            self.balancerTag = balancerTag
+            self.ruleTag = ruleTag
+            self.protocol = `protocol`
+        }
+        
+        var json: JSON {
+            return [
+                "domainMatcher": domainMatcher.json,
+                "type": type.json,
+                "domain": domain?.json,
+                "ip": ip?.json,
+                "port": port?.json,
+                "sourcePort": sourcePort?.json,
+                "network": network?.json,
+                "source": source?.json,
+                "inboundTag": inboundTag?.json,
+                "attrs": attrs?.json,
+                "outboundTag": outboundTag.json,
+                "balancerTag": balancerTag?.json,
+                "ruleTag": ruleTag.json
+            ].json
+        }
+    }
 
-struct RoutingRule: Codable, Hashable {
-    let domainMatcher: String
-    let type: String
-    let domain: [String]?
-    let ip: [String]?
-    let port: String?
-    let sourcePort: String?
-    let network: String?
-    let source: [String]?
-    let inboundTag: String?
-    let `protocol`: [String]?
-    let attrs: [String: String]?
-    let outboundTag: String
-    let balancerTag: String?
-    let ruleTag: String
-    
-    init(ruleTag: String,
-         outboundTag: String,
-         domain: [String]? = nil,
-         ip: [String]? = nil,
-         port: String? = nil,
-         sourcePort: String? = nil,
-         network: String? = nil,
-         source: [String]? = nil,
-         inboundTag: String? = nil,
-         attrs: [String : String]? = nil,
-         balancerTag: String? = nil,
-         `protocol`: [String]? = nil
-    ) {
-        self.domainMatcher = "hybrid"
-        self.type = "field"
-        self.domain = domain
-        self.ip = ip
-        self.port = port
-        self.sourcePort = sourcePort
-        self.network = network
-        self.source = source
-        self.inboundTag = inboundTag
-        self.attrs = attrs
-        self.outboundTag = outboundTag
-        self.balancerTag = balancerTag
-        self.ruleTag = ruleTag
-        self.protocol = `protocol`
-    }
-    
-    var json: JSON {
-        return [
-            "domainMatcher": domainMatcher.json,
-            "type": type.json,
-            "domain": domain?.json,
-            "ip": ip?.json,
-            "port": port?.json,
-            "sourcePort": sourcePort?.json,
-            "network": network?.json,
-            "source": source?.json,
-            "inboundTag": inboundTag?.json,
-            "attrs": attrs?.json,
-            "outboundTag": outboundTag.json,
-            "balancerTag": balancerTag?.json,
-            "ruleTag": ruleTag.json
-        ].json
-    }
 }
 
 // MARK: Link

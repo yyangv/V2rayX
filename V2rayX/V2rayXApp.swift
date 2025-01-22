@@ -11,25 +11,26 @@ import SwiftUI
 struct V2rayXApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @State private var settingModel = SettingModel()
-    
     var body: some Scene {
         MenuBarExtra {
-            PopoverContentView()
-                .environment(settingModel)
+            PopoverWindow()
         } label: {
             Image(nsImage: menuBarImage())
         }
         .menuBarExtraStyle(.window)
         
-        Window("Main", id: "Main") {
-            MainContentView()
-                .frame(width: 300, height: 300, alignment: .center)
-        }
+//        Window("Main", id: "Main") {
+//            MainContentView()
+//                .frame(width: 300, height: 300, alignment: .center)
+//        }
         
         Window("Setting", id: "Setting") {
-            SettingContentView()
-                .environment(settingModel)
+            SettingWindow()
+                .onAppear {
+                    if let win = NSApp.windows.first(where: { $0.title == "Setting" }) {
+                        win.makeKeyAndOrderFront(nil)
+                    }
+                }
         }
     }
     
@@ -41,6 +42,12 @@ struct V2rayXApp: App {
     }
 }
 
+extension EnvironmentValues {
+    @Entry var modSetting = SettingModel()
+    @Entry var modNodes = NodesModel()
+    @Entry var modCore = CoreModel()
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
 //        clearUserDefaults()
@@ -48,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(_ notification: Notification) {
         // Clean up code here
-        Utils.shared.restoreSystemProxy()
+        SystemProxy.shared.restore()
     }
     
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

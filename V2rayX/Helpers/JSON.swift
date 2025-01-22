@@ -1,52 +1,11 @@
 //
-//  Shared.swift
+//  Json.swift
 //  V2rayX
 //
-//  Created by 杨洋 on 2024/12/13.
+//  Created by 杨洋 on 2025/1/21.
 //
 
 import Foundation
-
-// MARK: - Constants
-
-let OutboundProxyTag = XrayConfigBuilder.kOutboundProxyTag
-let OutboundDirectTag = XrayConfigBuilder.kOutboundDirectTag
-let OutboundRejectTag = XrayConfigBuilder.kOutboundRejectTag
-
-
-// MARK: - Error
-
-struct V2Error: Error, LocalizedError, CustomStringConvertible {
-    let message: String
-    
-    var description: String {
-        return message
-    }
-    
-    init(_ message: String) {
-        self.message = message
-    }
-}
-
-extension Error {
-    var message: String {
-        return "\(self)"
-    }
-}
-
-// MARK: - Extension
-
-extension Int {
-    var string: String {
-        return String(self)
-    }
-}
-
-extension String {
-    var int: Int {
-        return Int(self) ?? -1
-    }
-}
 
 // MARK: - Coder
 

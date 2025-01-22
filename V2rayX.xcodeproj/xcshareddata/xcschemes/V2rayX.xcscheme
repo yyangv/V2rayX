@@ -52,6 +52,17 @@
                ReferencedContainer = "container:V2rayX.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7589156D2D3C844300D82673"
+               BuildableName = "CoreSDKTests.xctest"
+               BlueprintName = "CoreSDKTests"
+               ReferencedContainer = "container:V2rayX.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
