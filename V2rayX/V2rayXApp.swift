@@ -26,11 +26,6 @@ struct V2rayXApp: App {
         
         Window("Setting", id: "Setting") {
             SettingWindow()
-                .onAppear {
-                    if let win = NSApp.windows.first(where: { $0.title == "Setting" }) {
-                        win.makeKeyAndOrderFront(nil)
-                    }
-                }
         }
     }
     

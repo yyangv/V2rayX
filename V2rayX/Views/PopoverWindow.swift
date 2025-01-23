@@ -239,6 +239,7 @@ struct PopoverWindow: View {
     }
     
     private func openWindowAndActive(id: String) {
+        NSApplication.shared.activate(ignoringOtherApps: true)
         openWindow(id: id)
     }
     
