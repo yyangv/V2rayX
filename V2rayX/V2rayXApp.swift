@@ -19,10 +19,9 @@ struct V2rayXApp: App {
         }
         .menuBarExtraStyle(.window)
         
-//        Window("Main", id: "Main") {
-//            MainContentView()
-//                .frame(width: 300, height: 300, alignment: .center)
-//        }
+        Window("Main", id: "Main") {
+            MainWindow()
+        }
         
         Window("Setting", id: "Setting") {
             SettingWindow()

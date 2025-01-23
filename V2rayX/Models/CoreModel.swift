@@ -235,6 +235,13 @@ import Foundation
         logLevel = store.string(forKey: kLogLevel)!
         
         statsEnabled = store.bool(forKey: kStatsEnable)
+                
+        CoreRunner.shared.initialize(handleStdout: handleStdout(msg:))
+    }
+    
+    private func handleStdout(msg: String) {
+        // TODO: log
+        print("[stdout] \(msg)")
     }
     
     private static func install() {

@@ -21,6 +21,20 @@ class SystemProxy {
         Self.restoreSystemProxyInfo(saved)
     }
     
+    func clear() {
+        let bin = "/usr/sbin/networksetup"
+        Self.getNetworkInterfaces().forEach { network in
+            _ = Utils.runCommand(bin: bin, args: ["-setwebproxy", network, "", ""])
+            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxy", network, "", ""])
+            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, "", ""])
+            
+            _ = Utils.runCommand(bin: bin, args: ["-setwebproxystate", network, "off"])
+            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "off"])
+            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "off"])
+        }
+        saved.removeAll()
+    }
+    
     private static func registerSystemProxy(hh: String, hp: String, sh: String, sp: String) {
         let bin = "/usr/sbin/networksetup"
         getNetworkInterfaces().forEach { network in

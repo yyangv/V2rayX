@@ -116,13 +116,14 @@ struct PopoverWindow: View {
             Divider()
             
             // Open Main Scene
-            //            Button {
-            //
-            //            } label: {
-            //                Image(systemName: "macwindow")
-            //                    .imageScale(.large)
-            //            }.buttonStyle(PlainButtonStyle())
-            //                .toolTip("Open main window.")
+            Button {
+                openWindowAndActive(id: "Main")
+            } label: {
+                Image(systemName: "macwindow")
+                    .imageScale(.large)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .toolTip("Open main window.")
             
             // Open Preference Scene
             Button {
