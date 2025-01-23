@@ -70,7 +70,7 @@ class CoreRunner {
         if let proxy = conn!.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
             proxy.close()
         }
-        conn!.suspend()
+        conn!.invalidate()
     }
     
     func sendLog(_ log: String) {

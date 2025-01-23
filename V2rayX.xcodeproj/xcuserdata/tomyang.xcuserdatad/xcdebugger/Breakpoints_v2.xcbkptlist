@@ -7,32 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C3F2391A-11FC-4F00-A0D5-49A3483F759E"
+            uuid = "4878C8EB-CE4D-490F-B9A2-9F03039ADF55"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "V2rayX/Views/Setting Pages/RoutePage.swift"
+            filePath = "V2rayX/Models/CoreModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "378"
-            endingLineNumber = "378"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F741F8B6-EB4E-4402-B5F9-EC9FCEFC73D3"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "V2rayX-CoreRunner/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14"
-            endingLineNumber = "14"
-            landmarkName = "listener(_:shouldAcceptNewConnection:)"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "run(activeLink:logAccessURL:logErrorURL:configURL:rules:onCompleted:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

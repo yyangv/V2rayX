@@ -344,15 +344,17 @@ fileprivate struct NodeItemView: View {
         .scaleEffect(scale)
         .animation(.spring(response: 0.5, dampingFraction: 0.5), value: scale)
         .onTapGesture {
-            startAnimation()
-            onSelected(data.id)
+            startAnimation {
+                onSelected(data.id)
+            }
         }
     }
     
-    private func startAnimation() {
+    private func startAnimation(after: @escaping ()->Void) {
         scale = 0.9
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             scale = 1
+            after()
         }
     }
     
