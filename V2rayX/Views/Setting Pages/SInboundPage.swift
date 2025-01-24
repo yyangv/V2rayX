@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SInboundPage: View {
-    @Environment(\.modCore) private var modCore
+    @Environment(CoreModel.self) private var modCore
     
     @State private var editingHostOpen = false
     @State private var editingHost: HostData? = nil

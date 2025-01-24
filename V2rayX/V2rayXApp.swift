@@ -11,9 +11,16 @@ import SwiftUI
 struct V2rayXApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
+    @State private var modNodes = NodesModel()
+    @State private var modCore = CoreModel()
+    @State private var modSetting = SettingModel()
+    
     var body: some Scene {
         MenuBarExtra {
             PopoverWindow()
+                .environment(modNodes)
+                .environment(modCore)
+                .environment(modSetting)
         } label: {
             Image(nsImage: menuBarImage())
         }
@@ -21,10 +28,16 @@ struct V2rayXApp: App {
         
         Window("Main", id: "Main") {
             MainWindow()
+                .environment(modNodes)
+                .environment(modCore)
+                .environment(modSetting)
         }
         
         Window("Setting", id: "Setting") {
             SettingWindow()
+                .environment(modNodes)
+                .environment(modCore)
+                .environment(modSetting)
         }
     }
     
@@ -34,12 +47,6 @@ struct V2rayXApp: App {
         image.isTemplate = true
         return image
     }
-}
-
-extension EnvironmentValues {
-    @Entry var modSetting = SettingModel()
-    @Entry var modNodes = NodesModel()
-    @Entry var modCore = CoreModel()
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {

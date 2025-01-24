@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SOutboundPage: View {
-    @Environment(\.modCore) private var modCore
-    @Environment(\.modNodes) private var modNodes
+    @Environment(CoreModel.self) private var modCore
+    @Environment(NodesModel.self) private var modNodes
     
     var body: some View {
         @Bindable var mCore = modCore

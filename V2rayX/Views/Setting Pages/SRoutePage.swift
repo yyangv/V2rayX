@@ -11,8 +11,8 @@ import SwiftData
 struct SRoutePage: View {
     @Environment(\.modelContext) private var modelContext
 
-    @Environment(\.modCore) private var modCore
-    @Environment(\.modSetting) private var modSetting
+    @Environment(CoreModel.self) private var modCore
+    @Environment(SettingModel.self) private var modSetting
 
     var body: some View {
         Form {

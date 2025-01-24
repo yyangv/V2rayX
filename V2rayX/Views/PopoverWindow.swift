@@ -12,9 +12,9 @@ struct PopoverWindow: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
     
-    @Environment(\.modSetting) private var modSetting
-    @Environment(\.modNodes) private var modNodes
-    @Environment(\.modCore) private var modCore
+    @Environment(SettingModel.self) private var modSetting
+    @Environment(NodesModel.self) private var modNodes
+    @Environment(CoreModel.self) private var modCore
     
     @State private var errorAlertOpen = false
     @State private var errorAlertMessage = ""

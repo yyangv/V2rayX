@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SGeneralPage: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.modSetting) private var modSettting
-    @Environment(\.modCore) private var modCore
+    @Environment(SettingModel.self) private var modSetting
+    @Environment(CoreModel.self) private var modCore
     
     @State private var errorAlertOpen = false
     @State private var errorAlertMessage = ""
@@ -36,7 +36,7 @@ struct SGeneralPage: View {
     
     private var SystemSection: some View {
         Section(header: Text("System")) {
-            @Bindable var m = modSettting
+            @Bindable var m = modSetting
             Section {
                 Toggle(isOn: $m.enableLoginLaunch) {
                     Text("Enable Auto Launch")
@@ -185,15 +185,15 @@ struct SGeneralPage: View {
     
     private func onEnableLoginLaunch(_ enabled: Bool) {
         if enabled {
-            modSettting.registerLoginLaunch(error(_:))
+            modSetting.registerLoginLaunch(error(_:))
         } else {
-            modSettting.unregisterLoginLaunch(error(_:))
+            modSetting.unregisterLoginLaunch(error(_:))
         }
     }
     
     private func onSelectHome() {
         if let url = self.openToGetURL() {
-            modSettting.homePath = url
+            modSetting.homePath = url
         }
     }
     
