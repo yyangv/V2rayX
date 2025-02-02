@@ -46,7 +46,9 @@ class CoreRunner {
     
     init(stdout: @escaping (String) -> Void) {
         self.stdout = stdout
-        super.init()
+    }
+    
+    func run(command: String, args: [String], cb: @escaping (Error?) -> Void) {
 #if DEBUG
         let sn = "com.istomyang.V2rayX-CoreRunner.debug"
 #else
@@ -56,21 +58,18 @@ class CoreRunner {
         conn.remoteObjectInterface = NSXPCInterface(with: V2rayX_CoreRunnerProtocol.self)
         conn.exportedInterface = NSXPCInterface(with: ClientProtocol.self)
         conn.exportedObject = self
+        conn.activate()
         self.conn = conn
-    }
-    
-    func run(command: String, args: [String], cb: @escaping (Error?) -> Void) {
-        conn!.resume()
-        if let proxy = conn!.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
+        if let proxy = conn.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
             proxy.run(command: command, args: args) { err in cb(err) }
         }
     }
     
     func close() {
-        if let proxy = conn!.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
+        if let proxy = conn?.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
             proxy.close()
         }
-        conn!.invalidate()
+        conn?.invalidate()
     }
     
     func sendLog(_ log: String) {
