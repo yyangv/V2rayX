@@ -9,25 +9,14 @@ import SwiftUI
 
 struct TestView: View {
     var body: some View {
-        Form {
-            Section {
-                
-            } header: {
-                HStack {
-                    Text("Core")
-                    Spacer()
-                    Button {
-                        
-                    } label: {
-                        Label("Select", systemImage: "document.badge.plus.fill")
-                            .labelStyle(.titleAndIcon)
-                    }
-                }
-            } footer: {
-                
+        VStack {
+            VStack {
+                Text("Hello, World! World!")
+                    .multilineTextAlignment(.leading)
             }
+            .frame(width: 100, height: 200)
         }
-        .formStyle(.grouped)
+        .frame(width: 200, height: 300)
     }
 }
 

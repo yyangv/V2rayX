@@ -298,6 +298,8 @@ fileprivate struct NodeItemView: View {
     
     @State private var scale: CGFloat = 1
     
+    @State private var titleTruncationMode: Text.TruncationMode = .tail
+    
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             Image(systemName: "checkmark")
@@ -309,7 +311,11 @@ fileprivate struct NodeItemView: View {
                 Text(data.name).font(.system(size: 12, weight: .semibold))
                     .frame(minWidth: 50)
                     .lineLimit(1)
-                    .truncationMode(.tail)
+                    .truncationMode(titleTruncationMode)
+                    .onHover { isHover in
+                        titleTruncationMode = isHover ? .head : .tail
+                    }
+                
                 Text(data.protocol0).foregroundColor(.secondary)
                     .font(.system(size: 10, weight: .regular))
                     .lineLimit(1)
