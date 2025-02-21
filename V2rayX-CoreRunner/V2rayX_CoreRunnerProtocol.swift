@@ -9,18 +9,18 @@ import Foundation
 
 /// The protocol that this service will vend as its API. This protocol will also need to be visible to the process hosting the service.
 @objc public protocol V2rayX_CoreRunnerProtocol: NSSecureCoding {
-    func run(command: String, args: [String], with reply: @escaping (Error?) -> Void)
+    func run(command: String, args: [String], with reply: @Sendable @escaping (Error?) -> Void)
     func close()
 }
 
-@objc public protocol ClientProtocol: NSSecureCoding {
+@objc public protocol ClientProtocol: NSSecureCoding, Sendable {
     func sendLog(_ log: String)
 }
 
 /*
  To use the service from an application or other process, use NSXPCConnection to establish a connection to the service by doing something like this:
 
-     connectionToService = NSXPCConnection(serviceName: "com.github.istomyang.V2rayX-CoreRunner")
+     connectionToService = NSXPCConnection(serviceName: "com.yangyang.V2rayX-CoreRunner")
      connectionToService.remoteObjectInterface = NSXPCInterface(with: V2rayX_CoreRunnerProtocol.self)
      connectionToService.resume()
 

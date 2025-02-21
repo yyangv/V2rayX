@@ -60,14 +60,12 @@ struct PopoverWindow: View {
             // Start.
             Button {
                 if isPlay {
-                    stop()
                     isPlay = false
+                    stop()
                 } else {
                     isPlay = true
                     start { e in
-                        errorOrSucess(e) {
-                            isPlay = true
-                        }
+                        errorOrSuccess(e, fail: { isPlay = false })
                     }
                 }
             } label: {
@@ -102,9 +100,7 @@ struct PopoverWindow: View {
                 }
                 isRefreshing = true
                 syncSubscription { e in
-                    errorOrSucess(e) {
-                        isRefreshing = false
-                    }
+                    errorOrSuccess(e, finally: { isRefreshing = false })
                 }
             } label: {
                 Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90.icloud.fill")
@@ -180,8 +176,7 @@ struct PopoverWindow: View {
         let link = id
         modNodes.activeLink = link
         if isPlay {
-            stop()
-            start { e in error(e) }
+            stop { start { e in errorOrSuccess(e) } }
         }
     }
     
@@ -194,45 +189,49 @@ struct PopoverWindow: View {
     }
     
     private func start(_ onCompleted: @escaping (Error?)->Void) {
-        let activeLink = modNodes.activeLink
-        let homeURL = modSetting.homePath
-        if activeLink.isEmpty {
-            onCompleted(V2Error.message("Node is not set."))
-            return
-        }
-        if homeURL == nil {
-            onCompleted(V2Error.message("Home path is not set."))
-            return
-        }
-        
-        let logAccessURL = homeURL!.appendingPathComponent("access.log")
-        let logErrorURL = homeURL!.appendingPathComponent("error.log")
-        let configURL = homeURL!.appending(path: "config.json")
-        
-        do {
-            let container = try ModelContainer(for: RouteRuleModel.self)
-            let rules = try container.mainContext.fetch(FetchDescriptor<RouteRuleModel>(
-                sortBy: [ .init(\.idx, order: .forward) ]
-            ))
+        Task {
+            let activeLink = modNodes.activeLink
+            let homeURL = modSetting.homePath
+            if activeLink.isEmpty {
+                onCompleted(V2Error.message("Node is not set."))
+                return
+            }
+            if homeURL == nil {
+                onCompleted(V2Error.message("Home path is not set."))
+                return
+            }
             
-            try modCore.run(
-                activeLink: activeLink,
-                logAccessURL: logAccessURL,
-                logErrorURL: logErrorURL,
-                configURL: configURL,
-                rules: rules,
-                onCompleted: onCompleted
-            )
-        } catch V2Error.binaryUnexecutable {
-            onCompleted(V2Error.message("Core binary is not executable."))
-            openSystemSettingSecurity()
-        } catch {
-            onCompleted(error)
+            let logAccessURL = homeURL!.appendingPathComponent("access.log")
+            let logErrorURL = homeURL!.appendingPathComponent("error.log")
+            let configURL = homeURL!.appending(path: "config.json")
+            
+            do {
+                let container = try ModelContainer(for: RouteRuleModel.self)
+                let rules = try container.mainContext.fetch(FetchDescriptor<RouteRuleModel>(
+                    sortBy: [ .init(\.idx, order: .forward) ]
+                ))
+                
+                try await modCore.run(
+                    activeLink: activeLink,
+                    logAccessURL: logAccessURL,
+                    logErrorURL: logErrorURL,
+                    configURL: configURL,
+                    rules: rules
+                )
+            } catch V2Error.binaryUnexecutable {
+                onCompleted(V2Error.message("Core binary is not executable."))
+                openSystemSettingSecurity()
+            }  catch {
+                onCompleted(error)
+            }
         }
     }
     
-    private func stop() {
-        modCore.stop()
+    private func stop(_ onCompleted: @escaping ()->Void = {}) {
+        Task(priority: .userInitiated) {
+            await modCore.stop()
+            onCompleted()
+        }
     }
     
     private func closeApp() {
@@ -245,27 +244,31 @@ struct PopoverWindow: View {
     }
     
     private func syncSubscription(_ cb: @escaping (Error?)->Void) {
-        modNodes.syncSubscription(cb)
+        Task {
+            do { try await modNodes.syncSubscription() } catch {
+                cb(error)
+                return
+            }
+            cb(nil)
+        }
     }
     
     private func testResponseTime(_ cb: @escaping ()->Void) {
-        modNodes.testNodeResponseTime(cb)
-    }
-    
-    private func error(_ e: Error?) {
-        if let e = e {
-            errorAlertMessage = e.message
-            errorAlertOpen = true
+        Task {
+            await modNodes.testNodeResponseTime()
+            cb()
         }
     }
     
-    private func errorOrSucess(_ e: Error?, success: ()->Void) {
+    private func errorOrSuccess(_ e: Error?, fail: ()->Void = {}, success: ()->Void = {}, finally: ()->Void = {}) {
         if let e = e {
             errorAlertMessage = e.message
             errorAlertOpen = true
-            return
+            fail()
+        } else {
+            success()
         }
-        success()
+        finally()
     }
     
     private func openSystemSettingSecurity() {
@@ -350,17 +353,15 @@ fileprivate struct NodeItemView: View {
         .scaleEffect(scale)
         .animation(.spring(response: 0.5, dampingFraction: 0.5), value: scale)
         .onTapGesture {
-            startAnimation {
-                onSelected(data.id)
-            }
+            startAnimation()
+            onSelected(data.id)
         }
     }
     
-    private func startAnimation(after: @escaping ()->Void) {
+    private func startAnimation() {
         scale = 0.9
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             scale = 1
-            after()
         }
     }
     

@@ -18,8 +18,8 @@ struct SAboutPage: View {
             Text("Storage Usage").font(.title3).padding(.top, 20)
             Text("""
 V2rayx use UserDefaults as Preference Storage and SwiftData as Data Storage:
-UserDefaults Locaton: ~/Library/Preferences/com.istomyang.V2rayX(.debug).plist
-SwiftData Locaton: ~/Library/Containers/com.istomyang.V2rayX(--CoreRunner)
+UserDefaults Locaton: ~/Library/Preferences/com.yangyang.V2rayX(.debug).plist
+SwiftData Locaton: ~/Library/Containers/com.yangyang.V2rayX(--CoreRunner)
 """)
             
             Spacer()

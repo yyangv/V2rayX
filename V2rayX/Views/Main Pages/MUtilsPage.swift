@@ -13,15 +13,19 @@ struct MUtilsPage: View {
             HStack {
                 Text("Clear System Proxy")
                 Spacer()
-                Button(action: {
-                    SystemProxy.shared.clear()
-                }) {
+                Button {
+                    clearProxy()
+                } label: {
                     Label("Clear", systemImage: "eraser.line.dashed.fill")
                         .labelStyle(.titleAndIcon)
                 }
             }
         }
         .formStyle(.grouped)
+    }
+    
+    private func clearProxy() {
+        Task { await SystemProxy.shared.clear() }
     }
 }
 

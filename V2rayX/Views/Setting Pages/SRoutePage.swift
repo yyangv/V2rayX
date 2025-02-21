@@ -18,7 +18,7 @@ struct SRoutePage: View {
         Form {
             PreferenceSection
             RuleSection
-            GeoSection
+//            GeoSection
         }
         .formStyle(.grouped)
     }
@@ -495,17 +495,21 @@ fileprivate struct GeoItem: View {
     @State private var downloadId = ""
     
     private func launchDownload(link: URL) {
-        downloadId = DownloadManager.shared.download(link: link, saveTo: data.saveTo, override: true) { progress in
-            self.progress = progress
-        } onSaved: {
-            self.onDownloaded(nil)
-        } onError: { e in
-            self.onDownloaded(e)
+        Task(priority: .medium) {
+            downloadId = await DownloadManager.shared.download(
+                link: link, saveTo: data.saveTo, override: true
+            ) { progress in
+                DispatchQueue.main.async { self.progress = progress }
+            } onSaved: {
+                DispatchQueue.main.async { self.onDownloaded(nil) }
+            } onError: { e in
+                DispatchQueue.main.async { self.onDownloaded(e) }
+            }
         }
     }
     
     private func cancelDownload() {
-        DownloadManager.shared.cancel(id: downloadId)
+        Task { await DownloadManager.shared.cancel(id: downloadId) }
     }
     
     struct Data: Identifiable {

@@ -184,10 +184,10 @@ struct SGeneralPage: View {
     }
     
     private func onEnableLoginLaunch(_ enabled: Bool) {
-        if enabled {
-            modSetting.registerLoginLaunch(error(_:))
-        } else {
-            modSetting.unregisterLoginLaunch(error(_:))
+        do {
+           try modSetting.enableLoginLaunch(enabled)
+        } catch {
+            self.error(error)
         }
     }
     
@@ -205,16 +205,14 @@ struct SGeneralPage: View {
     }
     
     private func loadLocalVersion() {
-        modCore.fetchLocalCoreVersion { v in
-            if let v = v {
-                version = v
-            }
+        Task {
+            version = await modCore.fetchLocalCoreVersion() ?? ""
         }
     }
     
     private func loadNetVersion() {
-        modCore.fetchNetVersion { v in
-            netVersion = v
+        Task {
+            netVersion = await modCore.fetchNetVersion()
         }
     }
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DownloadManager {
+actor DownloadManager {
     static let shared = DownloadManager()
     
     private var downloaders: [String: Downloader] = [:] // link ->
@@ -16,9 +16,9 @@ class DownloadManager {
         link: URL,
         saveTo: URL,
         override: Bool = true,
-        onProgress: @escaping (Double) -> Void,
-        onSaved: @escaping () -> Void,
-        onError: @escaping (Error) -> Void
+        onProgress: @Sendable @escaping (Double) -> Void,
+        onSaved: @Sendable @escaping () -> Void,
+        onError: @Sendable @escaping (Error) -> Void
     ) -> String {
         let id = link.path()
         let download = Downloader(
@@ -54,7 +54,7 @@ class DownloadManager {
     }
 }
 
-fileprivate class Downloader: NSObject, URLSessionDelegate {
+fileprivate class Downloader: NSObject, URLSessionDelegate, @unchecked Sendable {
     private var session: URLSession?
     private var task: URLSessionDownloadTask?
     
@@ -82,22 +82,34 @@ fileprivate class Downloader: NSObject, URLSessionDelegate {
     }
     
     func start() {
-        self.session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
-        self.task = self.session?.downloadTask(with: link)
-        self.resume()
+        runSafely {
+            self.session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
+            self.task = self.session?.downloadTask(with: self.link)
+            self.resume()
+        }
     }
     
     func cancel() {
-        task?.cancel()
-        session?.invalidateAndCancel()
+        runSafely {
+            self.task?.cancel()
+            self.session?.invalidateAndCancel()
+        }
     }
     
     func pause() {
-        task?.suspend()
+        runSafely { self.task?.suspend() }
     }
     
     func resume() {
-        task?.resume()
+        runSafely { self.task?.resume() }
+    }
+    
+    private let queue = DispatchQueue(label: "com.yangyang.V2rayX.downloader", qos: .userInitiated)
+    
+    private func runSafely(_ block: @Sendable @escaping () -> Void) {
+        queue.async {
+            block()
+        }
     }
     
     func urlSession(

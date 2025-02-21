@@ -8,9 +8,9 @@
 import Foundation
 
 @Observable class CoreModel {
-    static let kProxyTag = XrayConfigBuilder.kOutboundProxyTag
-    static let kDirectTag = XrayConfigBuilder.kOutboundProxyTag
-    static let kRejectTag = XrayConfigBuilder.kOutboundProxyTag
+    static let kProxyTag = XrayConfig.kOutboundProxyTag
+    static let kDirectTag = XrayConfig.kOutboundProxyTag
+    static let kRejectTag = XrayConfig.kOutboundProxyTag
     
     private let store = UserDefaults.standard
     
@@ -99,14 +99,13 @@ import Foundation
         didSet { store.set(statsEnabled, forKey: kStatsEnable) }
     }
     
-    func run(
+    @MainActor func run(
         activeLink: String,
         logAccessURL: URL,
         logErrorURL: URL,
         configURL: URL,
-        rules: [RouteRuleModel],
-        onCompleted: @escaping (Error?)->Void
-    ) throws {
+        rules: [RouteRuleModel]
+    ) async throws {
         typealias E = V2Error
         
         if corePath.isEmpty {
@@ -114,7 +113,7 @@ import Foundation
         }
         let coreURL = URL(fileURLWithPath: corePath)
         
-        if !Utils.checkBinaryExecutable(coreURL) {
+        if !(await Utils.checkBinaryExecutable(coreURL)) {
             throw E.binaryUnexecutable
         }
         
@@ -153,53 +152,51 @@ import Foundation
             stats: XrayConfig.Stats(enable: statsEnabled)
         )
         
-        let configData = try XrayConfigBuilder.shared.buildConfig(config: config)
-        try Utils.write(path: configURL, data: configData, override: true)
-        
-        CoreRunner.shared.start(bin: coreURL, config: configURL) { e in
-            if let e = e {
-                onCompleted(e)
-                return
+        try await Task(priority: .userInitiated) {
+            let configData = try config.build()
+            try await Utils.write(path: configURL, data: configData, override: true)
+            
+            try await CoreRunner.shared.start(bin: coreURL, config: configURL) { msg in
+                // TODO: handle std output.
+                print(msg)
             }
+            
             let h = "127.0.0.1"
             let hp = self.inPortHttp
             let sp = self.inPortSocks
-            SystemProxy.shared.registerWithSave(hh: h, hp: hp, sh: h, sp: sp)
-            onCompleted(nil)
-        }
+            await SystemProxy.shared.registerWithSave(hh: h, hp: hp, sh: h, sp: sp)
+        }.value
     }
     
-    func stop() {
-        CoreRunner.shared.stop()
-        SystemProxy.shared.restore()
+    @MainActor func stop() async {
+        await Task(priority: .userInitiated) {
+            await CoreRunner.shared.stop()
+            await SystemProxy.shared.restore()
+        }.value
     }
     
-    func fetchLocalCoreVersion(cb: @escaping (String?)->Void) {
+    @MainActor func fetchLocalCoreVersion() async -> String? {
         if corePath.isEmpty {
-            cb(nil)
-            return
+            return nil
         }
         let url = URL(fileURLWithPath: corePath)
-        DispatchQueue.main.async {
-            let v = Utils.getCoreVersion(url)
-            cb(v)
-        }
+        return await Task { await Utils.getCoreVersion(url) }.value
     }
     
-    func fetchNetVersion(cb: @escaping (String?)->Void) {
+    @MainActor func fetchNetVersion() async -> String? {
         if coreGithub.isEmpty {
-            cb(nil)
-            return
+            return nil
         }
         let a = coreGithub.components(separatedBy: "/")
         if a.count < 2 {
-            cb(nil)
-            return
+            return nil
         }
-        DispatchQueue.main.async {
-            Utils.fetchGithubLatestVersion(owner: a.first!, repo: a.last!) { v, _ in
-                cb(v)
-            }
+        do {
+            return try await Task {
+                try await Utils.fetchGithubLatestVersion(owner: a.first!, repo: a.last!)
+            }.value
+        } catch {
+            return nil
         }
     }
     
@@ -235,13 +232,6 @@ import Foundation
         logLevel = store.string(forKey: kLogLevel)!
         
         statsEnabled = store.bool(forKey: kStatsEnable)
-                
-        CoreRunner.shared.initialize(handleStdout: handleStdout(msg:))
-    }
-    
-    private func handleStdout(msg: String) {
-        // TODO: log
-        print("[stdout] \(msg)")
     }
     
     private static func install() {
@@ -255,7 +245,7 @@ import Foundation
             // Inbound
             store.set("10808", forKey: kInboundPortHTTP)
             store.set("10809", forKey: kInboundPortSOCKS)
-            store.set(true, forKey: kInboundAllowLAN)
+            store.set(false, forKey: kInboundAllowLAN)
             
             // DNS
             store.set("", forKey: kDNSHosts)
@@ -272,9 +262,6 @@ import Foundation
             
             // Routing
             store.set("IPIfNonMatch", forKey: kRoutingDomainStrategy)
-            
-            // Stats
-            store.set(true, forKey: kStatsEnable)
             
             // Log
             store.set(false, forKey: kLogEnableAccess)

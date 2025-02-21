@@ -8,9 +8,55 @@
 import Foundation
 import SwiftUI
 
+actor IOQueue {
+    static let shared = IOQueue()
+    
+    private let queue = DispatchQueue(label: "com.yangyang.V2rayX.IOQueue", qos: .userInitiated)
+    
+    func task(_ block: @escaping @Sendable () async throws -> Void) {
+        queue.async { runBlockingThrowable { try await block() } }
+    }
+}
+
+func runBlocking(_ block: @escaping @Sendable () async -> Void) {
+    let semaphore = DispatchSemaphore(value: 0)
+    Task {
+        await block()
+        semaphore.signal()
+    }
+    semaphore.wait()
+}
+
+func runBlockingThrowable(_ block: @escaping @Sendable () async throws -> Void) {
+    let semaphore = DispatchSemaphore(value: 0)
+    Task {
+        try await block()
+        semaphore.signal()
+    }
+    semaphore.wait()
+}
+
 func genResourceId(length: Int) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     return String((0 ..< length).map { _ in letters.randomElement()! })
+}
+
+func runCommand(bin: String, args: [String]) async -> String {
+    return await Task {
+        let task = Process()
+        task.launchPath = bin
+        task.arguments = args
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        do {
+            try task.run()
+            task.waitUntilExit()
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            return String(data: data, encoding: .utf8) ?? ""
+        } catch {
+            return ""
+        }
+    }.value
 }
 
 extension Int {

@@ -25,20 +25,8 @@ import ServiceManagement
         homePath = store.url(forKey: kHomePath)
     }
     
-    func registerLoginLaunch(_ onError: (Error?)->Void) {
-        do {
-            try SMAppService.mainApp.register()
-        } catch {
-            onError(error)
-        }
-    }
-    
-    func unregisterLoginLaunch(_ onError: (Error)->Void) {
-        do {
-            try SMAppService.mainApp.unregister()
-        } catch {
-            onError(error)
-        }
+    func enableLoginLaunch(_ enabled: Bool) throws {
+        enabled ? try SMAppService.mainApp.register() : try SMAppService.mainApp.unregister()
     }
 }
 

@@ -51,12 +51,14 @@ struct V2rayXApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-//        clearUserDefaults()
+        // clearUserDefaults()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
         // Clean up code here
-        SystemProxy.shared.restore()
+        runBlocking {
+            await SystemProxy.shared.restore()
+        }
     }
     
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

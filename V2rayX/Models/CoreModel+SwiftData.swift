@@ -67,7 +67,7 @@ import Foundation
         [
             RouteRuleModel(
                 name: "UDP443 Reject",
-                outboundTag: XrayConfigBuilder.kOutboundRejectTag,
+                outboundTag: XrayConfig.kOutboundRejectTag,
                 enabled: true,
                 idx: 0,
                 port: "443",
@@ -76,7 +76,7 @@ import Foundation
             ),
             RouteRuleModel(
                 name: "AD Reject",
-                outboundTag: XrayConfigBuilder.kOutboundRejectTag,
+                outboundTag: XrayConfig.kOutboundRejectTag,
                 enabled: true,
                 idx: 1,
                 domain: "geosite:category-ads-all",
@@ -85,7 +85,7 @@ import Foundation
             ),
             RouteRuleModel(
                 name: "LAN IP Direct",
-                outboundTag: XrayConfigBuilder.kOutboundDirectTag,
+                outboundTag: XrayConfig.kOutboundDirectTag,
                 enabled: true,
                 idx: 2,
                 ip: "geoip:private",
@@ -94,7 +94,7 @@ import Foundation
             ),
             RouteRuleModel(
                 name: "China Domain Direct",
-                outboundTag: XrayConfigBuilder.kOutboundDirectTag,
+                outboundTag: XrayConfig.kOutboundDirectTag,
                 enabled: true,
                 idx: 3,
                 domain: "domain:dns.alidns.com,domain:doh.pub,domain:dot.pub,domain:doh.360.cn,domain:dot.360.cn,geosite:cn,geosite:geolocation-cn",
@@ -103,7 +103,7 @@ import Foundation
             ),
             RouteRuleModel(
                 name: "China IP Direct",
-                outboundTag: XrayConfigBuilder.kOutboundDirectTag,
+                outboundTag: XrayConfig.kOutboundDirectTag,
                 enabled: true,
                 idx: 4,
                 ip: "223.5.5.5/32,223.6.6.6/32,2400:3200::1/128,2400:3200:baba::1/128,119.29.29.29/32,1.12.12.12/32,120.53.53.53/32,2402:4e00::/128,2402:4e00:1::/128,180.76.76.76/32,2400:da00::6666/128,114.114.114.114/32,114.114.115.115/32,180.184.1.1/32,180.184.2.2/32,101.226.4.6/32,218.30.118.6/32,123.125.81.6/32,140.207.198.6/32,geoip:cn",
@@ -112,7 +112,7 @@ import Foundation
             ),
             RouteRuleModel(
                 name: "Last Proxy",
-                outboundTag: XrayConfigBuilder.kOutboundProxyTag,
+                outboundTag: XrayConfig.kOutboundProxyTag,
                 enabled: true,
                 idx: 5,
                 port: "0-65535",

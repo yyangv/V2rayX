@@ -7,53 +7,52 @@
 
 import Foundation
 
-class SystemProxy {
+actor SystemProxy {
     static let shared = SystemProxy()
     
     private var saved: [SystemProxyInfo] = []
     
-    func registerWithSave(hh: String, hp: String, sh: String, sp: String) {
-        saved = Self.getSystemProxyInfo()
-        Self.registerSystemProxy(hh: hh, hp: hp, sh: sh, sp: sp)
+    func registerWithSave(hh: String, hp: String, sh: String, sp: String) async {
+        saved = await getSystemProxyInfo()
+        await registerSystemProxy(hh: hh, hp: hp, sh: sh, sp: sp)
     }
     
-    func restore() {
-        Self.restoreSystemProxyInfo(saved)
+    func restore() async {
+        await restoreSystemProxyInfo(saved)
     }
     
-    func clear() {
-        let bin = "/usr/sbin/networksetup"
-        Self.getNetworkInterfaces().forEach { network in
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxy", network, "", ""])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxy", network, "", ""])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, "", ""])
+    private let bin = "/usr/sbin/networksetup"
+    
+    func clear() async {
+        for network in await getNetworkInterfaces() {
+            _ = await runCommand(bin: bin, args: ["-setwebproxy", network, "", ""])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxy", network, "", ""])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, "", ""])
             
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxystate", network, "off"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "off"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "off"])
+            _ = await runCommand(bin: bin, args: ["-setwebproxystate", network, "off"])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "off"])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "off"])
         }
         saved.removeAll()
     }
     
-    private static func registerSystemProxy(hh: String, hp: String, sh: String, sp: String) {
-        let bin = "/usr/sbin/networksetup"
-        getNetworkInterfaces().forEach { network in
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxy", network, hh, hp])
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxystate", network, "on"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxy", network, sh, sp])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "on"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, sh, sp])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "on"])
+    private func registerSystemProxy(hh: String, hp: String, sh: String, sp: String) async {
+        for network in await getNetworkInterfaces() {
+            _ = await runCommand(bin: bin, args: ["-setwebproxy", network, hh, hp])
+            _ = await runCommand(bin: bin, args: ["-setwebproxystate", network, "on"])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxy", network, sh, sp])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxystate", network, "on"])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, sh, sp])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, "on"])
         }
     }
     
-    private static func getSystemProxyInfo() ->  [SystemProxyInfo] {
+    private func getSystemProxyInfo() async -> [SystemProxyInfo] {
         var r: [SystemProxyInfo] = []
-        let bin = "/usr/sbin/networksetup"
-        getNetworkInterfaces().forEach { network in
-            let raw1 = Utils.runCommand(bin: bin, args: ["-getwebproxy", network])
-            let raw2 = Utils.runCommand(bin: bin, args: ["-getsecurewebproxy", network])
-            let raw3 = Utils.runCommand(bin: bin, args: ["-getsocksfirewallproxy", network])
+        for network in await getNetworkInterfaces() {
+            let raw1 = await runCommand(bin: bin, args: ["-getwebproxy", network])
+            let raw2 = await runCommand(bin: bin, args: ["-getsecurewebproxy", network])
+            let raw3 = await runCommand(bin: bin, args: ["-getsocksfirewallproxy", network])
             let a1 = handleSystemProxyGetInfo(raw: raw1)
             let a2 = handleSystemProxyGetInfo(raw: raw2)
             let a3 = handleSystemProxyGetInfo(raw: raw3)
@@ -73,21 +72,20 @@ class SystemProxy {
         return r
     }
     
-    private static func restoreSystemProxyInfo(_ infos: [SystemProxyInfo]) {
-        let bin = "/usr/sbin/networksetup"
-        infos.forEach { info in
+    private func restoreSystemProxyInfo(_ infos: [SystemProxyInfo]) async {
+        for info in infos {
             let network = info.network
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxy", network, info.httpHost, String(info.httpPort)])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxy", network, info.httpsHost, String(info.httpsPort)])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, info.socksHost, String(info.socksPort)])
+            _ = await runCommand(bin: bin, args: ["-setwebproxy", network, info.httpHost, String(info.httpPort)])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxy", network, info.httpsHost, String(info.httpsPort)])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxy", network, info.socksHost, String(info.socksPort)])
             
-            _ = Utils.runCommand(bin: bin, args: ["-setwebproxystate", network, info.httpEnabled ? "on" : "off"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsecurewebproxystate", network, info.httpsEnabled ? "on" : "off"])
-            _ = Utils.runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, info.socksEnabled ? "on" : "off"])
+            _ = await runCommand(bin: bin, args: ["-setwebproxystate", network, info.httpEnabled ? "on" : "off"])
+            _ = await runCommand(bin: bin, args: ["-setsecurewebproxystate", network, info.httpsEnabled ? "on" : "off"])
+            _ = await runCommand(bin: bin, args: ["-setsocksfirewallproxystate", network, info.socksEnabled ? "on" : "off"])
         }
     }
     
-    private static func handleSystemProxyGetInfo(raw: String) -> (Bool, String, Int) {
+    private func handleSystemProxyGetInfo(raw: String) -> (Bool, String, Int) {
         var enabled: Bool = false
         var server: String = ""
         var port: Int = 0
@@ -109,8 +107,8 @@ class SystemProxy {
         return (enabled, server, port)
     }
     
-    private static func getNetworkInterfaces() -> [String] {
-        return Utils.runCommand(bin: "/usr/sbin/networksetup", args: ["listallnetworkservices"])
+    private func getNetworkInterfaces() async -> [String] {
+        return await runCommand(bin: "/usr/sbin/networksetup", args: ["listallnetworkservices"])
             .split(separator: "\n")
             .filter({ !$0.starts(with: "An asterisk") })
             .map { String($0) }

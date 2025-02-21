@@ -9,30 +9,30 @@ import Foundation
 import XPC
 import V2rayX_CoreRunner
 
-class CoreRunner {
+actor CoreRunner {
     static let shared = CoreRunner()
     
     private var client: XPCClient? = nil
     
-    func initialize(handleStdout: @escaping (String) -> Void) {
-        self.client = XPCClient(stdout: handleStdout)
-    }
-    
-    func start(bin: URL, config: URL, callback: @escaping (Error?) -> Void) {
-        guard let client = client else {
-            callback(V2Error.message("Client is not initialized."))
-            return
+    func start(
+        bin: URL,
+        config: URL,
+        stdOutput: @Sendable @escaping (String) -> Void = {_ in }
+    ) async throws {
+        if self.client == nil {
+            self.client = XPCClient(stdout: stdOutput)
         }
-        client.run(command: bin.path, args: ["run", "-c", config.path], cb: callback)
+        try await self.client!.run(command: bin.path, args: ["run", "-c", config.path])
     }
     
-    func stop() {
-        client?.close()
+    func stop() async {
+        await client?.close()
     }
 }
 
-@objc(_TtC6V2rayXP33_64D1B500EBE4661D27C56256BF1F21E89XPCClient)fileprivate class XPCClient: NSObject, ClientProtocol {
-    static var supportsSecureCoding: Bool = true
+@objc(_TtC6V2rayXP33_64D1B500EBE4661D27C56256BF1F21E89XPCClient)
+fileprivate class XPCClient: NSObject, @unchecked Sendable {
+    static let supportsSecureCoding: Bool = true
     
     func encode(with coder: NSCoder) {
     }
@@ -48,11 +48,11 @@ class CoreRunner {
         self.stdout = stdout
     }
     
-    func run(command: String, args: [String], cb: @escaping (Error?) -> Void) {
+    func run(command: String, args: [String]) async throws {
 #if DEBUG
-        let sn = "com.istomyang.V2rayX-CoreRunner.debug"
+        let sn = "com.yangyang.V2rayX-CoreRunner.debug"
 #else
-        let sn = "com.istomyang.V2rayX-CoreRunner"
+        let sn = "com.yangyang.V2rayX-CoreRunner"
 #endif
         let conn = NSXPCConnection(serviceName: sn)
         conn.remoteObjectInterface = NSXPCInterface(with: V2rayX_CoreRunnerProtocol.self)
@@ -60,18 +60,25 @@ class CoreRunner {
         conn.exportedObject = self
         conn.activate()
         self.conn = conn
-        if let proxy = conn.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
-            proxy.run(command: command, args: args) { err in cb(err) }
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            if let proxy = conn.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
+                proxy.run(command: command, args: args) { err in
+                    err != nil ? continuation.resume(throwing: err!) : continuation.resume()
+                }
+            }
         }
     }
     
-    func close() {
+    func close() async {
         if let proxy = conn?.remoteObjectProxy as? V2rayX_CoreRunnerProtocol {
             proxy.close()
         }
         conn?.invalidate()
     }
-    
+}
+
+extension XPCClient: ClientProtocol {
     func sendLog(_ log: String) {
         self.stdout(log)
     }
