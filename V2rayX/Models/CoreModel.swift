@@ -154,11 +154,11 @@ import Foundation
         
         try await Task(priority: .userInitiated) {
             let configData = try config.build()
-            try await Utils.write(path: configURL, data: configData, override: true)
+            try Utils.write(path: configURL, data: configData, override: true)
             
             try await CoreRunner.shared.start(bin: coreURL, config: configURL) { msg in
                 // TODO: handle std output.
-                print(msg)
+                debugPrint("xray ===> ", msg)
             }
             
             let h = "127.0.0.1"

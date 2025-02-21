@@ -29,26 +29,28 @@ class Utils {
     
     // MARK: - File
     
-    static func write(path: URL, data: Data, override: Bool = true) async throws {
-        return try await Task {
-            if override, FileManager.default.fileExists(atPath: path.path) {
-                try FileManager.default.removeItem(at: path)
-            }
-            try data.write(to: path)
-        }.value
+    static func write(path: URL, data: Data, override: Bool = true) throws {
+        if override, FileManager.default.fileExists(atPath: path.path) {
+            try FileManager.default.removeItem(at: path)
+        }
+        try data.write(to: path)
     }
     
     // MARK: - Binary Executable Detection
     
     static func checkBinaryExecutable(_ bin: URL) async -> Bool {
-        return await Task {
-            let task = Process()
-            task.executableURL = bin
-            do { try task.run() } catch {
-                return false
+        return await withUnsafeContinuation { cont in
+            DispatchQueue.global().async {
+                let task = Process()
+                task.executableURL = bin
+                var result = true
+                do { try task.run() } catch {
+                    result =  false
+                }
+                task.terminate()
+                cont.resume(returning: result)
             }
-            return true
-        }.value
+        }
     }
     
     // MARK: - Connection Test

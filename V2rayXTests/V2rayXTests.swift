@@ -12,12 +12,8 @@ import Foundation
 
 
 struct V2rayXTests {
-    @Test func example() async throws {
+    @Test func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-        
-        let a = "1,"
-        let b = a.components(separatedBy: ",")
-        debugPrint(a)
     }
 }
 

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		75061D512D24DFCA00AC7091 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 75061D502D24DFCA00AC7091 /* Resources */; };
 		7513429A2D02E00E00E6E6A2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 751342992D02E00E00E6E6A2 /* README.md */; };
-		75AEBA612CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -19,13 +18,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 75AEB9E22CE9F16600E275FB;
 			remoteInfo = V2rayX;
-		};
-		75AEBA5F2CEA0E5B00E275FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 75AEB9DB2CE9F16600E275FB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 75AEBA542CEA0E5B00E275FB;
-			remoteInfo = "V2rayX-CoreRunner";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -46,7 +38,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
-				75AEBA612CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,18 +49,7 @@
 		751342992D02E00E00E6E6A2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		75AEB9E32CE9F16600E275FB /* V2rayX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2rayX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2rayXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = "V2rayX-CoreRunner.xpc"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		75AEBA622CEA0E5B00E275FB /* Exceptions for "V2rayX-CoreRunner" folder in "V2rayX-CoreRunner" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		75AEB9E52CE9F16600E275FB /* V2rayX */ = {
@@ -80,14 +60,6 @@
 		75AEB9F92CE9F16800E275FB /* V2rayXTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = V2rayXTests;
-			sourceTree = "<group>";
-		};
-		75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				75AEBA622CEA0E5B00E275FB /* Exceptions for "V2rayX-CoreRunner" folder in "V2rayX-CoreRunner" target */,
-			);
-			path = "V2rayX-CoreRunner";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -107,13 +79,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75AEBA522CEA0E5B00E275FB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -122,7 +87,6 @@
 			children = (
 				75AEB9E52CE9F16600E275FB /* V2rayX */,
 				75AEB9F92CE9F16800E275FB /* V2rayXTests */,
-				75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */,
 				75AEB9E42CE9F16600E275FB /* Products */,
 				751342992D02E00E00E6E6A2 /* README.md */,
 				75061D502D24DFCA00AC7091 /* Resources */,
@@ -134,7 +98,6 @@
 			children = (
 				75AEB9E32CE9F16600E275FB /* V2rayX.app */,
 				75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */,
-				75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,7 +118,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				75AEBA602CEA0E5B00E275FB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				75AEB9E52CE9F16600E275FB /* V2rayX */,
@@ -190,28 +152,6 @@
 			productReference = 75AEB9F62CE9F16800E275FB /* V2rayXTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 75AEBA632CEA0E5B00E275FB /* Build configuration list for PBXNativeTarget "V2rayX-CoreRunner" */;
-			buildPhases = (
-				75AEBA512CEA0E5B00E275FB /* Sources */,
-				75AEBA522CEA0E5B00E275FB /* Frameworks */,
-				75AEBA532CEA0E5B00E275FB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				75AEBA562CEA0E5B00E275FB /* V2rayX-CoreRunner */,
-			);
-			name = "V2rayX-CoreRunner";
-			packageProductDependencies = (
-			);
-			productName = "V2rayX-CoreRunner";
-			productReference = 75AEBA552CEA0E5B00E275FB /* V2rayX-CoreRunner.xpc */;
-			productType = "com.apple.product-type.xpc-service";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -228,9 +168,6 @@
 					75AEB9F52CE9F16800E275FB = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = 75AEB9E22CE9F16600E275FB;
-					};
-					75AEBA542CEA0E5B00E275FB = {
-						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
@@ -252,7 +189,6 @@
 			targets = (
 				75AEB9E22CE9F16600E275FB /* V2rayX */,
 				75AEB9F52CE9F16800E275FB /* V2rayXTests */,
-				75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */,
 			);
 		};
 /* End PBXProject section */
@@ -268,13 +204,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		75AEB9F42CE9F16800E275FB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		75AEBA532CEA0E5B00E275FB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -298,13 +227,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75AEBA512CEA0E5B00E275FB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -312,11 +234,6 @@
 			isa = PBXTargetDependency;
 			target = 75AEB9E22CE9F16600E275FB /* V2rayX */;
 			targetProxy = 75AEB9F72CE9F16800E275FB /* PBXContainerItemProxy */;
-		};
-		75AEBA602CEA0E5B00E275FB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 75AEBA542CEA0E5B00E275FB /* V2rayX-CoreRunner */;
-			targetProxy = 75AEBA5F2CEA0E5B00E275FB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -451,7 +368,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"V2rayX/Support Files/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -479,7 +396,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"V2rayX/Support Files/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -531,48 +448,6 @@
 			};
 			name = Release;
 		};
-		75AEBA642CEA0E5B00E275FB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "V2rayX-CoreRunner/V2rayX_CoreRunner.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "V2rayX-CoreRunner/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "V2rayX-CoreRunner";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yangyang.V2rayX-CoreRunner.debug";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-			};
-			name = Debug;
-		};
-		75AEBA652CEA0E5B00E275FB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "V2rayX-CoreRunner/V2rayX_CoreRunner.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "V2rayX-CoreRunner/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "V2rayX-CoreRunner";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yangyang.V2rayX-CoreRunner";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -599,15 +474,6 @@
 			buildConfigurations = (
 				75AEBA0E2CE9F16800E275FB /* Debug */,
 				75AEBA0F2CE9F16800E275FB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		75AEBA632CEA0E5B00E275FB /* Build configuration list for PBXNativeTarget "V2rayX-CoreRunner" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				75AEBA642CEA0E5B00E275FB /* Debug */,
-				75AEBA652CEA0E5B00E275FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

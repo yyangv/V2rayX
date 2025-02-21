@@ -221,14 +221,14 @@ struct PopoverWindow: View {
             } catch V2Error.binaryUnexecutable {
                 onCompleted(V2Error.message("Core binary is not executable."))
                 openSystemSettingSecurity()
-            }  catch {
+            } catch {
                 onCompleted(error)
             }
         }
     }
     
     private func stop(_ onCompleted: @escaping ()->Void = {}) {
-        Task(priority: .userInitiated) {
+        Task {
             await modCore.stop()
             onCompleted()
         }

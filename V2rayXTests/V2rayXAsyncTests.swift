@@ -11,20 +11,14 @@ import Foundation
 @testable import V2rayX
 
 struct V2rayXAsyncTests {
-    @Test func test_process() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-        
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/sleep")
-        process.arguments = ["5"]
-        
-        do {
-            try process.run()
-            print("111111")
-            process.waitUntilExit()
-            print("222222")
-        } catch {
-            print("Failed to run the process: \(error)")
+    @Test func test_async() {
+        debugPrint("start")
+        Task {
+            try await Task.sleep(nanoseconds: 1_000_000_000 * 2)
+            debugPrint("done")
+        }
+        debugPrint("end")
+        while true {
         }
     }
 }
