@@ -226,7 +226,7 @@ struct PopoverWindow: View {
             let configURL = homeURL.appending(path: "config.json")
             
             do {
-                let container = try ModelContainer(for: RouteRuleModel.self)
+                let container = SwiftDataHelper.createModelContainer(for: RouteRuleModel.self)
                 let rules = try container.mainContext.fetch(FetchDescriptor<RouteRuleModel>(
                     sortBy: [ .init(\.idx, order: .forward) ]
                 ))
