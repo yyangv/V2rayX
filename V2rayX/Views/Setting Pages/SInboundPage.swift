@@ -10,7 +10,6 @@ import SwiftUI
 struct SInboundPage: View {
     @Environment(CoreModel.self) private var modCore
     
-    @State private var editingHostOpen = false
     @State private var editingHost: HostData? = nil
     
     var body: some View {
@@ -46,7 +45,6 @@ struct SInboundPage: View {
                     let hosts = m.hosts.map { HostData($0) }
                     ForEach(hosts) { h in
                         HostItem(domain: h.domain, ip: h.ip, onEdit: {
-                            editingHostOpen = true
                             editingHost = h
                         }, onRemove: {
                             onHostRemove(h)
@@ -58,20 +56,17 @@ struct SInboundPage: View {
                     Text("DNS Hosts")
                     Spacer()
                     Button(action: {
-                        editingHost = nil
-                        editingHostOpen = true
+                        editingHost = HostData()
                     }) {
                         Label("Add New Host", systemImage: "document.badge.plus.fill")
                             .labelStyle(.titleAndIcon)
                     }
                 }
             }
-            .sheet(isPresented: $editingHostOpen) {
-                let h = editingHost ?? HostData()
+            .sheet(item: $editingHost) { h in
                 HostEditor(domain: h.domain, ip: h.ip) { domain, ip in
                     onHostInsertOrUpdate(h, Host(domain: domain, ip: ip))
                 } onDismiss: {
-                    editingHostOpen = false
                     editingHost = nil
                 }
             }

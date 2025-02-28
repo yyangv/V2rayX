@@ -16,8 +16,7 @@ struct PopoverWindow: View {
     @Environment(NodesModel.self) private var modNodes
     @Environment(CoreModel.self) private var modCore
     
-    @State private var errorAlertOpen = false
-    @State private var errorAlertMessage = ""
+    @State private var alertMessage: String? = nil
 
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
@@ -35,12 +34,12 @@ struct PopoverWindow: View {
             Spacer()
         }
         .padding(.horizontal, 5)
-        .alert2("Error", isPresented: $errorAlertOpen) {
+        .alert2("Error", data: $alertMessage) {
             Button("OK") {
-                errorAlertOpen = false
+                alertMessage = nil
             }
-        } message: {
-            Text(errorAlertMessage)
+        } message: { message in
+            Text(message)
         }
         .frame(width: 300, height: 500)
     }
@@ -141,6 +140,9 @@ struct PopoverWindow: View {
             .toolTip("Close App")
         }
         .padding([.top, .horizontal], 10)
+        .onAppear {
+            runAutoUpdate()
+        }
     }
     
     @State private var nodes: [NodeItemView.Data] = []
@@ -172,6 +174,25 @@ struct PopoverWindow: View {
         )
     }
     
+    private func runAutoUpdate() {
+        if !modSetting.enableAutoUpdateAndTest {
+            return
+        }
+        if !modNodes.nodeRTs.isEmpty {
+            return
+        }
+        isRefreshing = true
+        syncSubscription { e in
+            isRefreshing = false
+            if e == nil {
+                isTestRTing = true
+                testResponseTime {
+                    isTestRTing = false
+                }
+            }
+        }
+    }
+    
     private func onNodeSelected(id: String) {
         let link = id
         modNodes.activeLink = link
@@ -191,19 +212,15 @@ struct PopoverWindow: View {
     private func start(_ onCompleted: @escaping (Error?)->Void) {
         Task {
             let activeLink = modNodes.activeLink
-            let homeURL = modSetting.homePath
             if activeLink.isEmpty {
                 onCompleted(V2Error.message("Node is not set."))
                 return
             }
-            if homeURL == nil {
-                onCompleted(V2Error.message("Home path is not set."))
-                return
-            }
             
-            let logAccessURL = homeURL!.appendingPathComponent("access.log")
-            let logErrorURL = homeURL!.appendingPathComponent("error.log")
-            let configURL = homeURL!.appending(path: "config.json")
+            let homeURL = appHomeDirectory()
+            let logAccessURL = homeURL.appendingPathComponent("access.log")
+            let logErrorURL = homeURL.appendingPathComponent("error.log")
+            let configURL = homeURL.appending(path: "config.json")
             
             do {
                 let container = try ModelContainer(for: RouteRuleModel.self)
@@ -245,7 +262,14 @@ struct PopoverWindow: View {
     
     private func syncSubscription(_ cb: @escaping (Error?)->Void) {
         Task {
-            do { try await modNodes.syncSubscription() } catch {
+            do {
+                try await modNodes.syncSubscription()
+                modNodes.nodeRTs.removeAll()
+                if !modNodes.links.contains(where: { $0 == modNodes.activeLink }) {
+                    modNodes.activeLink = ""
+                    alertMessage = "The active node is not in the newest node list."
+                }
+            } catch {
                 cb(error)
                 return
             }
@@ -262,8 +286,7 @@ struct PopoverWindow: View {
     
     private func errorOrSuccess(_ e: Error?, fail: ()->Void = {}, success: ()->Void = {}, finally: ()->Void = {}) {
         if let e = e {
-            errorAlertMessage = e.message
-            errorAlertOpen = true
+            alertMessage = e.message
             fail()
         } else {
             success()
@@ -379,25 +402,26 @@ fileprivate struct NodeItemView: View {
 // MARK: - Alert View
 
 extension View {
-    fileprivate func alert2<A, B>(
+    fileprivate func alert2<A, B, C>(
         _ title: String,
-        isPresented: Binding<Bool>,
+        data: Binding<Optional<C>>,
         @ViewBuilder actions: @escaping () -> A,
-        @ViewBuilder message: @escaping () -> B
+        @ViewBuilder message: @escaping (_ data: C) -> B
     ) -> some View where A: View, B: View {
         ZStack {
             self
-            if isPresented.wrappedValue {
-                Alert(title: title, actions: actions, message: message)
+            if let data = data.wrappedValue {
+                Alert(title: title, data: data, actions: actions, message: message)
             }
         }
     }
 }
 
-fileprivate struct Alert<A, B>: View where A: View, B: View {
+fileprivate struct Alert<A, B, C>: View where A: View, B: View {
     let title: String
+    let data: C
     @ViewBuilder let actions: ()->A
-    @ViewBuilder let message: ()->B
+    @ViewBuilder let message: (_ data: C)->B
     
     var body: some View {
         Group {
@@ -406,7 +430,7 @@ fileprivate struct Alert<A, B>: View where A: View, B: View {
                     .padding(.bottom, 5)
                 Text(title).font(.headline)
                 
-                message()
+                message(data)
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 10)
@@ -445,18 +469,18 @@ fileprivate struct Alert<A, B>: View where A: View, B: View {
 }
 
 #Preview("Alert") {
-    @Previewable @State var open = false
+    @Previewable @State var message: String? = nil
     
     VStack {
         Button("Open") {
-            open = true
+            message = "This is a very long message, A long message will wrap to multiple lines."
         }
     }
-    .alert2("Title", isPresented: $open, actions: {
+    .alert2("Title", data: $message, actions: {
         Button("OK") {
-            open.toggle()
+            message = nil
         }
-    }, message: {
+    }, message: { data in
         Text("This is a very long message, A long message will wrap to multiple lines.")
     })
     .frame(width: 300, height: 300, alignment: .center)

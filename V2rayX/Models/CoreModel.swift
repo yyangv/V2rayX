@@ -17,9 +17,6 @@ import Foundation
     var corePath: String {
         didSet { store.set(corePath, forKey: kCorePath) }
     }
-    var coreName: String {
-        didSet { store.set(coreName, forKey: kCoreName) }
-    }
     var coreGithub: String {
         didSet { store.set(coreGithub, forKey: kCoreGithub) }
     }
@@ -97,6 +94,11 @@ import Foundation
     
     var statsEnabled: Bool {
         didSet { store.set(statsEnabled, forKey: kStatsEnable) }
+    }
+    
+    func migrate() {
+        let kCoreName = "C/CoreName"
+        store.removeObject(forKey: kCoreName)
     }
     
     @MainActor func run(
@@ -205,7 +207,6 @@ import Foundation
         
         let store = UserDefaults.standard
         
-        coreName = store.string(forKey: kCoreName) ?? ""
         corePath = store.string(forKey: kCorePath) ?? ""
         coreGithub = store.string(forKey: kCoreGithub) ?? ""
         
@@ -314,8 +315,6 @@ struct Host {
 }
 
 // MARK: - Store Key
-
-fileprivate let kCoreName = "C/CoreName"
 fileprivate let kCorePath = "C/CorePath"
 fileprivate let kCoreGithub = "C/CoreGithub"
 

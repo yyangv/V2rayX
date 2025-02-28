@@ -15,18 +15,23 @@ import ServiceManagement
         didSet { store.set(enableLoginLaunch, forKey: kEnableLoginLaunch) }
     }
     
-    var homePath: URL? {
-        didSet { store.set(homePath, forKey: kHomePath) }
+    var enableAutoUpdateAndTest: Bool {
+        didSet { store.set(kEnableAutoUpdateAndTest, forKey: kEnableAutoUpdateAndTest) }
     }
     
     init() {
         let store = UserDefaults.standard
         enableLoginLaunch = store.bool(forKey: kEnableLoginLaunch)
-        homePath = store.url(forKey: kHomePath)
+        enableAutoUpdateAndTest = store.bool(forKey: kEnableAutoUpdateAndTest)
     }
     
     func enableLoginLaunch(_ enabled: Bool) throws {
         enabled ? try SMAppService.mainApp.register() : try SMAppService.mainApp.unregister()
+    }
+    
+    func migrate() {
+        let kHomePath = "S/HomePath"
+        store.removeObject(forKey: kHomePath)
     }
 }
 
@@ -34,4 +39,4 @@ import ServiceManagement
 // MARK: - Store Key
 
 fileprivate let kEnableLoginLaunch = "S/EnableLoginLaunch"
-fileprivate let kHomePath = "S/HomePath"
+fileprivate let kEnableAutoUpdateAndTest = "S/EnableAutoUpdateAndTest"

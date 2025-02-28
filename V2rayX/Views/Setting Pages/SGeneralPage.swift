@@ -44,31 +44,29 @@ struct SGeneralPage: View {
                 .onChange(of: m.enableLoginLaunch) { _, enabled in
                     onEnableLoginLaunch(enabled)
                 }
-            }
-            
-            Section {
-                HStack(alignment: .center) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Select Home Path").font(.headline)
-                        Text(m.homePath?.path() ?? "").font(.subheadline).foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    let t = m.homePath != nil ? "Change" : "Select"
-                    Button(t) { onSelectHome() }
-                        .buttonStyle(.bordered)
+                
+                Toggle(isOn: $m.enableAutoUpdateAndTest) {
+                    Text("Enable Auto Update Nodes")
+                    Text("When you open App, it will auto update nodes and test response time if needed.").font(.subheadline).foregroundColor(.secondary)
                 }
             }
             
             Section {
                 HStack(alignment: .center) {
-                    Text("Reset All Setting").font(.headline)
+                    VStack(alignment: .leading) {
+                        Text("Clear App").foregroundStyle(.red).font(.headline)
+                        Text("Reset all settings, delete all data, clear system proxy and exit App.").font(.subheadline)
+                    }
                     Spacer()
                     Button {
-                        clearUserDefaults()
-                        modelContext.container.deleteAllData()
-                        NSApp.terminate(nil)
+                        Task {
+                            clearUserDefaults()
+                            modelContext.container.deleteAllData()
+                            await SystemProxy.shared.clear()
+                            NSApp.terminate(nil)
+                        }
                     } label: {
-                        Label("Reset", systemImage: "trash.fill")
+                        Label("Click To Start", systemImage: "trash.fill")
                     }
                 }
             }
@@ -80,14 +78,13 @@ struct SGeneralPage: View {
     @State private var sheetCoreSelect = false
     
     private var CoreSection: some View {
-        
         Section {
             if (modCore.corePath.isEmpty) {
                 Text("No Core").font(.headline)
             } else {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(modCore.coreName).font(.headline)
+                        Text(fileNamefromPath(modCore.corePath)).font(.headline)
                         Divider()
                         HStack {
                             if !version.isEmpty {
@@ -125,7 +122,6 @@ struct SGeneralPage: View {
         }
         .sheet(isPresented: $sheetCoreSelect, content: {
             CoreSelector { info in
-                modCore.coreName = info.name
                 modCore.corePath = info.path
                 modCore.coreGithub = info.github
                 
@@ -191,12 +187,6 @@ struct SGeneralPage: View {
         }
     }
     
-    private func onSelectHome() {
-        if let url = self.openToGetURL() {
-            modSetting.homePath = url
-        }
-    }
-    
     private func error(_ e: Error?) {
         if let e = e {
             errorAlertMessage = e.message
@@ -223,12 +213,16 @@ struct SGeneralPage: View {
     }
 }
 
+fileprivate func fileNamefromPath(_ path: String) -> String {
+    let url = URL(fileURLWithPath: path)
+    return url.lastPathComponent
+}
+
 #Preview {
     SGeneralPage()
 }
 
 fileprivate struct CoreSelector: View {
-    @State private var name: String = ""
     @State private var path: String = ""
     @State private var github: String = ""
     
@@ -240,7 +234,6 @@ fileprivate struct CoreSelector: View {
         VStack(alignment: .center) {
             Text("Select Core").font(.headline)
             Form {
-                TextField("Name", text: $name, prompt: Text("xray_v24.12.31"))
                 HStack {
                     TextField("Core Path", text: $path, prompt: Text("Print Path"))
                     Divider()
@@ -263,7 +256,7 @@ fileprivate struct CoreSelector: View {
             HStack(alignment: .center) {
                 Spacer()
                 Button {
-                    onConfirm(CoreInfo(name: name, path: path, github: github))
+                    onConfirm(CoreInfo(path: path, github: github))
                     onDismiss()
                 } label: {
                     Text("Confirm")
@@ -283,7 +276,6 @@ fileprivate struct CoreSelector: View {
     }
     
     struct CoreInfo {
-        let name: String
         let path: String
         let github: String
     }

@@ -36,15 +36,14 @@ struct SRoutePage: View {
     
     @Query(sort: \RouteRuleModel.idx, order: .forward) private var rules: [RouteRuleModel]
     
-    @State private var sheetRuleOpen = false
     @State private var sheetRuleData: RuleItem.Data? = nil
     
     private var RuleSection: some View {
         Section {
             List {
-                ForEach(rules) { it in
+                ForEach(rules, id: \.uiId) { it in
                     let data = RuleItem.Data(
-                        key: it.name,
+                        id: it.id,
                         name: it.name,
                         outboundTag: it.outboundTag,
                         domain: it.domain,
@@ -55,7 +54,6 @@ struct SRoutePage: View {
                     )
                     RuleItem(rule: data, enabled: it.enabled) {
                         sheetRuleData = data
-                        sheetRuleOpen = true
                     } onEnabled: { enabled in
                         onRuleEnabled(it, enabled)
                     } onDelete: {
@@ -69,22 +67,20 @@ struct SRoutePage: View {
                 Text("Rule List")
                 Spacer()
                 Button {
-                    sheetRuleData = nil
-                    sheetRuleOpen = true
+                    sheetRuleData = RuleItem.Data.empty()
                 } label: {
                     Label("New Rule", systemImage: "document.badge.plus.fill")
                         .labelStyle(.titleAndIcon)
                 }
             }
         }
-        .sheet(isPresented: $sheetRuleOpen) {
-            let data = intoItemEditor(sheetRuleData)
+        .sheet(item: $sheetRuleData, content: { data in
+            let data = intoItemEditor(data)
             let options = options()
             Editor(data: data, outboundTagOptions: options, onConfirm: onEditorConfirm) {
-                sheetRuleOpen = false
                 sheetRuleData = nil
             }
-        }
+        })
         .onAppear {
             installRules()
         }
@@ -98,7 +94,7 @@ struct SRoutePage: View {
         Section {
             List {
                 ForEach(geos) { file in
-                    let saveTo = modSetting.homePath!.appendingPathComponent(file.fileName)
+                    let saveTo = appHomeDirectory().appendingPathComponent(file.fileName)
                     let data = GeoItem.Data(
                         id: file.id,
                         name: file.fileName,
@@ -207,14 +203,15 @@ struct SRoutePage: View {
             handleIdx(rules)
         } else {
             let idx = rules.firstIndex { $0.id == a.id }!
-            rules[idx].name = a.name
-            rules[idx].outboundTag = a.outboundTag
-            rules[idx].enabled = true
-            rules[idx].domain = a.domain
-            rules[idx].ip = a.ip
-            rules[idx].port = a.port
-            rules[idx].network = a.network
-            rules[idx].protocol0 = a.protocol
+            let rule = rules[idx]
+            rule.name = a.name
+            rule.outboundTag = a.outboundTag
+            rule.enabled = true
+            rule.domain = a.domain.nilValue
+            rule.ip = a.ip.nilValue
+            rule.port = a.port.nilValue
+            rule.network = a.network.nilValue
+            rule.protocol0 = a.protocol.nilValue
         }
     }
     
@@ -224,12 +221,9 @@ struct SRoutePage: View {
         }
     }
     
-    private func intoItemEditor(_ a: RuleItem.Data?) -> Editor.Data {
-        guard let a = a else {
-            return Editor.Data.empty()
-        }
+    private func intoItemEditor(_ a: RuleItem.Data) -> Editor.Data {
         return Editor.Data(
-            id: a.key,
+            id: a.id,
             name: a.name,
             domain: a.domain ?? "",
             ip: a.ip ?? "",
@@ -323,8 +317,8 @@ fileprivate struct RuleItem: View {
         return str
     }
     
-    struct Data: Codable {
-        let key: String
+    struct Data: Codable, Identifiable {
+        let id: String
         let name: String
         let outboundTag: String
         let domain: String?
@@ -332,6 +326,10 @@ fileprivate struct RuleItem: View {
         let port: String?
         let network: String?
         let `protocol`: String?
+        
+        static func empty() -> Self {
+            Self(id: "", name: "", outboundTag: "", domain: nil, ip: nil, port: nil, network: nil, protocol: nil)
+        }
     }
 }
 
@@ -412,10 +410,6 @@ fileprivate struct Editor: View {
         var network: String
         var `protocol`: String
         var outboundTag: String
-        
-        static func empty() -> Self {
-            return Data(id: "", name: "", domain: "", ip: "", port: "", network: "", protocol: "", outboundTag: "")
-        }
     }
     
     struct Option: Identifiable {
@@ -426,7 +420,8 @@ fileprivate struct Editor: View {
 }
 
 #Preview("Editor") {
-    Editor(data: Editor.Data.empty(), outboundTagOptions: [], onConfirm: { _ in }, onDismiss: {})
+    let data = Editor.Data(id: "", name: "New Rule", domain: "", ip: "", port: "", network: "", protocol: "", outboundTag: "")
+    Editor(data: data, outboundTagOptions: [], onConfirm: { _ in }, onDismiss: {})
 }
 
 fileprivate struct GeoItem: View {

@@ -18,10 +18,6 @@ struct SettingWindow: View {
     
     var body: some View {
         WindowTemplate(pages: pages)
-            .modelContainer(for: [
-                RouteRuleModel.self,
-                FileModel.self
-            ])
     }
 }
 

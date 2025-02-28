@@ -36,6 +36,12 @@ func runBlockingThrowable(_ block: @escaping @Sendable () async throws -> Void) 
     semaphore.wait()
 }
 
+func appHomeDirectory() -> URL {
+    let userHome = URL(fileURLWithPath: NSHomeDirectory())
+    let appHome = userHome.appending(path: ".v2rayx", directoryHint: .isDirectory)
+    return appHome
+}
+
 func genResourceId(length: Int) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     return String((0 ..< length).map { _ in letters.randomElement()! })
@@ -92,6 +98,18 @@ extension View {
             return panel.urls
         }
         return []
+    }
+}
+
+extension String {
+    var nilValue: String? {
+        return isEmpty ? nil : self
+    }
+}
+
+extension Optional<String> {
+    var str: String {
+        return self ?? ""
     }
 }
 

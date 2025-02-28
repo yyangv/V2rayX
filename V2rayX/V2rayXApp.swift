@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct V2rayXApp: App {
@@ -16,11 +17,14 @@ struct V2rayXApp: App {
     @State private var modSetting = SettingModel()
     
     var body: some Scene {
+        let container = createModelContainer(for:RouteRuleModel.self,FileModel.self)
+        
         MenuBarExtra {
             PopoverWindow()
                 .environment(modNodes)
                 .environment(modCore)
                 .environment(modSetting)
+                .modelContainer(container)
         } label: {
             Image(nsImage: menuBarImage())
         }
@@ -31,6 +35,7 @@ struct V2rayXApp: App {
                 .environment(modNodes)
                 .environment(modCore)
                 .environment(modSetting)
+                .modelContainer(container)
         }
         
         Window("Setting", id: "Setting") {
@@ -38,6 +43,7 @@ struct V2rayXApp: App {
                 .environment(modNodes)
                 .environment(modCore)
                 .environment(modSetting)
+                .modelContainer(container)
         }
     }
     
@@ -47,16 +53,42 @@ struct V2rayXApp: App {
         image.isTemplate = true
         return image
     }
+    
+    /// SwiftData has some bad ideas like default storage location.
+    /// https://gist.github.com/pdarcey/981b99bcc436a64df222cd8e3dd92871
+    private func createModelContainer(for types: any PersistentModel.Type...) -> ModelContainer {
+        let fm = FileManager.default
+        let appSupportURL = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        
+#if DEBUG
+        let appName = "V2rayX-Debug"
+#else
+        let appName = "V2rayX"
+#endif
+        let appURL = appSupportURL.appendingPathComponent(appName)
+        
+        if !fm.fileExists(atPath: appURL.path) {
+            try! fm.createDirectory (at: appURL, withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        let fileURL = appURL.appendingPathComponent("swiftdata.store")
+        let config = ModelConfiguration(url: fileURL)
+        
+        return try! ModelContainer(for: Schema(types), configurations: config)
+    }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // clearUserDefaults()
+        
+        ensureAppHomeExists()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
         // Clean up code here
         runBlocking {
+            await CoreRunner.shared.stop()
             await SystemProxy.shared.restore()
         }
     }
@@ -74,5 +106,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func catUserDefaults() {
         let store = UserDefaults.standard
         print(store.dictionaryRepresentation())
+    }
+    
+    private func ensureAppHomeExists() {
+        let path = appHomeDirectory().path()
+        if !FileManager.default.fileExists(atPath: path) {
+            try! FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        }
     }
 }

@@ -33,7 +33,8 @@ import Foundation
         network: String? = nil,
         protocol0: String? = nil
     ) {
-        self.id = "\(name)-\(genResourceId(length: 8))"
+        let id = "\(name)-\(genResourceId(length: 8))"
+        self.id = id
         self.name = name
         self.outboundTag = outboundTag
         self.enabled = enabled
@@ -61,6 +62,11 @@ import Foundation
             balancerTag: nil,
             protocol: a.protocol0 != nil ? a.protocol0?.components(separatedBy: ",") : nil
         )
+    }
+    
+    var uiId: String {
+        let components = [id, domain.str, ip.str, port.str, network.str, protocol0.str]
+        return components.joined()
     }
     
     static var preset: [RouteRuleModel] {

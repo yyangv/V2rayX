@@ -14,6 +14,11 @@ import Foundation
 struct V2rayXTests {
     @Test func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        let fileManager = FileManager.default
+        if let documentDirectory = fileManager.urls(for: .userDirectory, in: .userDomainMask).first {
+            print("App Data Path: \(documentDirectory.path)")
+        }
+        print(NSHomeDirectory())
     }
 }
 
