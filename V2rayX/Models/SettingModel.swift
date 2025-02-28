@@ -16,13 +16,15 @@ import ServiceManagement
     }
     
     var enableAutoUpdateAndTest: Bool {
-        didSet { store.set(kEnableAutoUpdateAndTest, forKey: kEnableAutoUpdateAndTest) }
+        didSet { store.set(enableAutoUpdateAndTest, forKey: kEnableAutoUpdateAndTest) }
     }
     
     init() {
         let store = UserDefaults.standard
         enableLoginLaunch = store.bool(forKey: kEnableLoginLaunch)
         enableAutoUpdateAndTest = store.bool(forKey: kEnableAutoUpdateAndTest)
+        
+        self.migrate()
     }
     
     func enableLoginLaunch(_ enabled: Bool) throws {

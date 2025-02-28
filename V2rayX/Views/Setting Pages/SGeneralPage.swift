@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SGeneralPage: View {
     @Environment(\.modelContext) private var modelContext
@@ -62,6 +63,7 @@ struct SGeneralPage: View {
                         Task {
                             clearUserDefaults()
                             modelContext.container.deleteAllData()
+                            SwiftDataHelper.clear()
                             await SystemProxy.shared.clear()
                             NSApp.terminate(nil)
                         }
@@ -238,7 +240,7 @@ fileprivate struct CoreSelector: View {
                     TextField("Core Path", text: $path, prompt: Text("Print Path"))
                     Divider()
                     Button(action: {
-                        if let url = openToGetURL(useFile: true) {
+                        if let url = getCoreURL() {
                             path = url.path()
                         }
                     }) {
@@ -273,6 +275,18 @@ fileprivate struct CoreSelector: View {
             Spacer()
         }
         .padding(.all, 10)
+    }
+    
+    
+    private func getCoreURL() -> URL? {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.allowsOtherFileTypes = true
+        panel.showsHiddenFiles = true
+        if panel.runModal() == .OK, let url = panel.urls.first {
+            return url
+        }
+        return nil
     }
     
     struct CoreInfo {

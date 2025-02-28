@@ -181,6 +181,9 @@ struct PopoverWindow: View {
         if !modNodes.nodeRTs.isEmpty {
             return
         }
+        if !modNodes.links.isEmpty {
+            return
+        }
         isRefreshing = true
         syncSubscription { e in
             isRefreshing = false

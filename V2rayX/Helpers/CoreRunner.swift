@@ -17,12 +17,17 @@ actor CoreRunner {
     func start(
         bin: URL,
         config: URL,
+        asset: URL,
         stdOutput: @Sendable @escaping (String) -> Void = {_ in }
     ) throws {
         if self.process != nil {
             return
         }
         let process = Process()
+        process.environment = [
+            "XRAY_LOCATION_ASSET": asset.path(),
+            "XRAY_LOCATION_CONFIG": asset.path(),
+        ]
         process.executableURL = bin
         process.arguments = ["run", "-c", config.path]
         let std = Pipe()

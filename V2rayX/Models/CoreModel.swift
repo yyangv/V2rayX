@@ -158,7 +158,7 @@ import Foundation
             let configData = try config.build()
             try Utils.write(path: configURL, data: configData, override: true)
             
-            try await CoreRunner.shared.start(bin: coreURL, config: configURL) { msg in
+            try await CoreRunner.shared.start(bin: coreURL, config: configURL, asset: appHomeDirectory()) { msg in
                 // TODO: handle std output.
                 debugPrint("xray ===> ", msg)
             }

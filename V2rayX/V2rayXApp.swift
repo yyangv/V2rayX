@@ -16,9 +16,9 @@ struct V2rayXApp: App {
     @State private var modCore = CoreModel()
     @State private var modSetting = SettingModel()
     
+    private let container = SwiftDataHelper.createModelContainer(for:RouteRuleModel.self,FileModel.self)
+    
     var body: some Scene {
-        let container = createModelContainer(for:RouteRuleModel.self,FileModel.self)
-        
         MenuBarExtra {
             PopoverWindow()
                 .environment(modNodes)
@@ -52,29 +52,6 @@ struct V2rayXApp: App {
         let image = NSImage(systemSymbolName: "v.square.fill", accessibilityDescription: nil)!.withSymbolConfiguration(config)!
         image.isTemplate = true
         return image
-    }
-    
-    /// SwiftData has some bad ideas like default storage location.
-    /// https://gist.github.com/pdarcey/981b99bcc436a64df222cd8e3dd92871
-    private func createModelContainer(for types: any PersistentModel.Type...) -> ModelContainer {
-        let fm = FileManager.default
-        let appSupportURL = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        
-#if DEBUG
-        let appName = "V2rayX-Debug"
-#else
-        let appName = "V2rayX"
-#endif
-        let appURL = appSupportURL.appendingPathComponent(appName)
-        
-        if !fm.fileExists(atPath: appURL.path) {
-            try! fm.createDirectory (at: appURL, withIntermediateDirectories: true, attributes: nil)
-        }
-        
-        let fileURL = appURL.appendingPathComponent("swiftdata.store")
-        let config = ModelConfiguration(url: fileURL)
-        
-        return try! ModelContainer(for: Schema(types), configurations: config)
     }
 }
 

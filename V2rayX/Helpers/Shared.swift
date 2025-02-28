@@ -78,17 +78,6 @@ extension String {
 }
 
 extension View {
-    func openToGetURL(useFile: Bool = false) -> URL? {
-        let panel = NSOpenPanel()
-        panel.canChooseFiles = useFile
-        panel.canChooseDirectories = true
-        panel.allowsMultipleSelection = false
-        if panel.runModal() == .OK, let url = panel.urls.first {
-            return url
-        }
-        return nil
-    }
-    
     func openGetFiles() -> [URL] {
         let panel = NSOpenPanel()
         panel.canChooseFiles = true
