@@ -9,8 +9,8 @@ import Foundation
 
 @Observable class CoreModel {
     static let kProxyTag = XrayConfig.kOutboundProxyTag
-    static let kDirectTag = XrayConfig.kOutboundProxyTag
-    static let kRejectTag = XrayConfig.kOutboundProxyTag
+    static let kDirectTag = XrayConfig.kOutboundDirectTag
+    static let kRejectTag = XrayConfig.kOutboundRejectTag
     
     private let store = UserDefaults.standard
     

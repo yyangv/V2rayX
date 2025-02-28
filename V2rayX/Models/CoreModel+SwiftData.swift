@@ -65,7 +65,7 @@ import Foundation
     }
     
     var uiId: String {
-        let components = [id, domain.str, ip.str, port.str, network.str, protocol0.str]
+        let components = [id, name, outboundTag, domain.str, ip.str, port.str, network.str, protocol0.str]
         return components.joined()
     }
     
