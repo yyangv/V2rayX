@@ -42,7 +42,6 @@ jobs:
           for arch in x86_64 arm64; do
             echo "Building for architecture: $arch"
             xcodebuild -project V2rayX.xcodeproj -scheme V2rayX -configuration Release -sdk macosx -arch $arch -derivedDataPath $GITHUB_WORKSPACE/build/$arch
-            xcodebuild -project V2rayX.xcodeproj -scheme V2rayX-CoreRunner -configuration Release -sdk macosx -arch $arch -derivedDataPath $GITHUB_WORKSPACE/build/$arch
             cd build/$arch/Build/Products/Release && zip -r V2rayX_$arch.zip V2rayX.app/ && cd -
           done
 
