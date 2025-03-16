@@ -59,6 +59,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // clearUserDefaults()
         
+        // Hide dock icon.
+        NSApp.setActivationPolicy(.accessory)
+        
         ensureAppHomeExists()
     }
     

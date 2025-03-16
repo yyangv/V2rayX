@@ -51,8 +51,8 @@ import Foundation
         return XrayConfig.RoutingRule(
             ruleTag: a.name,
             outboundTag: a.outboundTag,
-            domain: a.domain != nil ? a.domain?.components(separatedBy: ",") : nil,
-            ip: a.ip != nil ? a.ip?.components(separatedBy: ",") : nil,
+            domain: checkSplit(a.domain),
+            ip: checkSplit(a.ip),
             port: a.port,
             sourcePort: nil,
             network: a.network,
@@ -60,8 +60,16 @@ import Foundation
             inboundTag: nil,
             attrs: nil,
             balancerTag: nil,
-            protocol: a.protocol0 != nil ? a.protocol0?.components(separatedBy: ",") : nil
+            protocol: checkSplit(a.protocol0)
         )
+    }
+    
+    private func checkSplit(_ raw: String?) -> [String]? {
+        guard let raw = raw else {
+            return nil
+        }
+        let a = raw.components(separatedBy: ",")
+        return a.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
     }
     
     var uiId: String {
