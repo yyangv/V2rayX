@@ -10,6 +10,7 @@ import SwiftUI
 struct MainWindow: View {
     private let pages: [Page] = [
         Page(name: "Utils", icon: "wrench.and.screwdriver.fill") { MUtilsPage() },
+        Page(name: "Debug", icon: "ladybug.fill") { MDebugPage() },
     ]
     
     var body: some View {

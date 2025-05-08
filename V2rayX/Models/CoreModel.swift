@@ -12,6 +12,10 @@ import Foundation
     static let kDirectTag = XrayConfig.kOutboundDirectTag
     static let kRejectTag = XrayConfig.kOutboundRejectTag
     
+    // MARK: - Core Status
+    
+    var isRunning: Bool = false
+    
     private let store = UserDefaults.standard
     
     var corePath: String {
@@ -101,24 +105,13 @@ import Foundation
         store.removeObject(forKey: kCoreName)
     }
     
-    @MainActor func run(
+    @MainActor func buildConfig(
         activeLink: String,
         logAccessURL: URL,
         logErrorURL: URL,
         configURL: URL,
         rules: [RouteRuleModel]
-    ) async throws {
-        typealias E = V2Error
-        
-        if corePath.isEmpty {
-            throw E.message("Core is not set.")
-        }
-        let coreURL = URL(fileURLWithPath: corePath)
-        
-        if !(await Utils.checkBinaryExecutable(coreURL)) {
-            throw E.binaryUnexecutable
-        }
-        
+    ) async throws -> Data {
         let config = XrayConfig(
             log: XrayConfig.Log(
                 enableAccess:logEnableAccess,
@@ -154,20 +147,30 @@ import Foundation
             stats: XrayConfig.Stats(enable: statsEnabled)
         )
         
-        try await Task(priority: .userInitiated) {
-            let configData = try config.build()
-            try Utils.write(path: configURL, data: configData, override: true)
-            
-            try await CoreRunner.shared.start(bin: coreURL, config: configURL, asset: appHomeDirectory()) { msg in
-                // TODO: handle std output.
-                debugPrint("xray ===> ", msg)
-            }
-            
-            let h = "127.0.0.1"
-            let hp = self.inPortHttp
-            let sp = self.inPortSocks
-            await SystemProxy.shared.registerWithSave(hh: h, hp: hp, sh: h, sp: sp)
-        }.value
+        return try config.build()
+    }
+    
+    @MainActor func run(configURL: URL) async throws {
+        typealias E = V2Error
+        
+        if corePath.isEmpty {
+            throw E.message("Core is not set.")
+        }
+        let coreURL = URL(fileURLWithPath: corePath)
+        
+        if !(await Utils.checkBinaryExecutable(coreURL)) {
+            throw E.binaryUnexecutable
+        }
+        
+        try await CoreRunner.shared.start(bin: coreURL, config: configURL, asset: appHomeDirectory()) { msg in
+            // TODO: handle std output.
+            debugPrint("xray ===> ", msg)
+        }
+        
+        let h = "127.0.0.1"
+        let hp = self.inPortHttp
+        let sp = self.inPortSocks
+        await SystemProxy.shared.registerWithSave(hh: h, hp: hp, sh: h, sp: sp)
     }
     
     @MainActor func stop() async {

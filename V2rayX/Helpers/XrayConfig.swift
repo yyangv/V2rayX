@@ -278,14 +278,24 @@ fileprivate func buildOutbound(json: inout JSON, config: XrayConfig) throws {
     
     let params = parseLinkParams(link)
     
+    // Have no doc about this, and get it from V2rayNG.
+    if params.value("flow").count > 0 {
+        proxy["mux"]!["concurrency"] = (-1).json
+    }
+    
+    var name = "undefined"
+    
     // Protocol
     switch nodeProtocol {
     case "vless":
         let node = VlessNode(link: link)
         node.build(json: &proxy, params: params)
+        name = node.name
     default:
         throw V2Error.message("Unsupported node protocol: \(nodeProtocol)")
     }
+    
+    json["tag"] = name.json
     
     // Transport & Security
     let transportType = params.value("type")

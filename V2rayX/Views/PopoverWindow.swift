@@ -44,7 +44,6 @@ struct PopoverWindow: View {
         .frame(width: 300, height: 500)
     }
     
-    @State private var isPlay: Bool = false
     @State private var isRefreshing: Bool = false
     @State private var isTestRTing: Bool = false
     
@@ -58,19 +57,19 @@ struct PopoverWindow: View {
             
             // Start.
             Button {
-                if isPlay {
-                    isPlay = false
+                if modCore.isRunning {
+                    modCore.isRunning = false
                     stop()
                 } else {
-                    isPlay = true
+                    modCore.isRunning = true
                     start { e in
-                        errorOrSuccess(e, fail: { isPlay = false })
+                        errorOrSuccess(e, fail: { modCore.isRunning = false })
                     }
                 }
             } label: {
                 Image(systemName: "play.circle.fill")
                     .imageScale(.large)
-                    .foregroundStyle(isPlay ? .green : .primary)
+                    .foregroundStyle(modCore.isRunning ? .green : .primary)
             }
             .buttonStyle(PlainButtonStyle())
             .toolTip("Start running!")
@@ -145,8 +144,6 @@ struct PopoverWindow: View {
         }
     }
     
-    @State private var nodes: [NodeItemView.Data] = []
-    
     private var NodeList: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 5) {
@@ -199,7 +196,7 @@ struct PopoverWindow: View {
     private func onNodeSelected(id: String) {
         let link = id
         modNodes.activeLink = link
-        if isPlay {
+        if modCore.isRunning {
             stop { start { e in errorOrSuccess(e) } }
         }
     }
@@ -231,13 +228,18 @@ struct PopoverWindow: View {
                     sortBy: [ .init(\.idx, order: .forward) ]
                 ))
                 
-                try await modCore.run(
+                let configData = try await modCore.buildConfig(
                     activeLink: activeLink,
                     logAccessURL: logAccessURL,
                     logErrorURL: logErrorURL,
                     configURL: configURL,
                     rules: rules
                 )
+                
+                try Utils.write(path: configURL, data: configData, override: true)
+                
+                try await modCore.run(configURL: configURL)
+                onCompleted(nil)
             } catch V2Error.binaryUnexecutable {
                 onCompleted(V2Error.message("Core binary is not executable."))
                 openSystemSettingSecurity()
