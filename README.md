@@ -2,10 +2,6 @@
 
 V2rayX is a great macOS app for V2ray using SwiftUI and latest technology, with great design and best user experience.
 
-## TO-DO
-
-- 点击就启动
-
 ## Screenshots
 
 <div style="display: flex; justify-content: space-between;">
