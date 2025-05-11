@@ -68,24 +68,21 @@ class Utils {
         }
     }
     
-    static func measureRTVless(host: String, port: UInt16) async -> Int {
+    static func measureConnectivityVless(host: String, port: UInt16) async -> Bool {
         return await withUnsafeContinuation { cont in
-            let t0 = DispatchTime.now()
             var request = URLRequest(url: URL(string: "https://\(host):\(port)")!)
             request.httpMethod = "HEAD"
-            request.timeoutInterval = 10
+            request.timeoutInterval = 5
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: request) { _, response, error in
-                if error != nil { cont.resume(returning: -1); return }
+                if error != nil { cont.resume(returning: false); return }
                 if let res = response as? HTTPURLResponse {
                     if res.statusCode == 200 {
-                        let t1 = DispatchTime.now()
-                        let delta = (t1.uptimeNanoseconds - t0.uptimeNanoseconds) / 1_000_000
-                        cont.resume(returning: Int(delta))
+                        cont.resume(returning: true)
                         return
                     }
                 }
-                cont.resume(returning: -1)
+                cont.resume(returning: false)
             }
             task.resume()
         }

@@ -150,15 +150,15 @@ struct PopoverWindow: View {
                 ForEach(modNodes.links.indices, id: \.self) { idx in
                     let link = modNodes.links[idx]
                     let active = modNodes.activeLink
-                    let rt = modNodes.nodeRTs[link]
-                    let data = mapNode(link: link, active: active, idx: idx, rt: rt)
+                    let ok = modNodes.nodeRTs[link]
+                    let data = mapNode(link: link, active: active, idx: idx, connectivity: ok)
                     NodeItemView(data: data, onSelected: onNodeSelected(id:), onRemoved: onNodeRemoved(id:))
                 }
             }
         }
     }
     
-    private func mapNode(link: String, active: String, idx: Int, rt: Int?) -> NodeItemView.Data {
+    private func mapNode(link: String, active: String, idx: Int, connectivity: Bool?) -> NodeItemView.Data {
         let name = link.components(separatedBy: "#")[1]
         let protocol0 = link.components(separatedBy: "://")[0]
         let isIpv6 = isIpv6(link: link)
@@ -169,7 +169,7 @@ struct PopoverWindow: View {
             isIpv6: isIpv6,
             selected: active == link,
             useDark: idx % 2 == 0,
-            rt: rt
+            connectivity: connectivity
         )
     }
     
@@ -365,11 +365,8 @@ fileprivate struct NodeItemView: View {
             
             Spacer()
             
-            if let rt = data.rt {
-                Text("\(rt)ms")
-                    .font(.system(size: 10, weight: .regular))
-                    .foregroundColor(.secondary)
-            }
+            Image(systemName: "network")
+                .foregroundStyle(data.connectivity == nil ? .gray : (data.connectivity! ? .green : .red))
             
             Divider()
             
@@ -410,7 +407,7 @@ fileprivate struct NodeItemView: View {
         let isIpv6: Bool
         var selected: Bool
         var useDark: Bool
-        var rt: Int?
+        var connectivity: Bool?
     }
 }
 

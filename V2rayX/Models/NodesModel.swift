@@ -23,7 +23,7 @@ import SwiftData
         didSet { store.set(links, forKey: kSubscriptionLinks) }
     }
     
-    var nodeRTs: [String: Int] = [:] // link ->
+    var nodeRTs: [String: Bool] = [:] // link ->
     
     init() {
         let store = UserDefaults.standard
@@ -37,7 +37,7 @@ import SwiftData
         if links.isEmpty {
             return
         }
-        return await withTaskGroup(of: (String, Int).self) { group in
+        return await withTaskGroup(of: (String, Bool).self) { group in
             for link in self.links {
                 if !link.starts(with: "vless://") {
                     continue
@@ -46,8 +46,8 @@ import SwiftData
                 group.addTask {
                     return await Task(priority: .medium) {
                         let (host, ip) = Self.getServerAddress(link)
-                        let rt = await Utils.measureRTVless(host: host, port: ip)
-                        return (link, rt)
+                        let ok = await Utils.measureConnectivityVless(host: host, port: ip)
+                        return (link, ok)
                     }.value
                 }
             }
