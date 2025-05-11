@@ -9,6 +9,7 @@ import Foundation
 import Network
 import SwiftUI
 import ServiceManagement
+import UserNotifications
 
 class Utils {
     static func getCoreVersion(_ bin: URL) async -> String? {
@@ -154,5 +155,25 @@ class Utils {
         let start = b.upperBound
         let end = raw.index(before: a.upperBound)
         return String(raw[start..<end])
+    }
+    
+    // Notifications
+    
+    static func sendNotification(title: String, subtitle: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.subtitle = subtitle
+        content.body = body
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger
+        )
+        
+        UNUserNotificationCenter.current().add(request) { _ in }
     }
 }

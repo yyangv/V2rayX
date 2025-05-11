@@ -42,6 +42,9 @@ struct PopoverWindow: View {
             Text(message)
         }
         .frame(width: 300, height: 500)
+        .onAppear {
+            checkCoreVersion()
+        }
     }
     
     @State private var isRefreshing: Bool = false
@@ -299,6 +302,26 @@ struct PopoverWindow: View {
             success()
         }
         finally()
+    }
+    
+    private func checkCoreVersion() {
+        Task {
+            let today = Calendar.current.component(.day, from: Date())
+            if today == modCore.coreCheckTime {
+                return
+            }
+            modCore.coreCheckTime = today
+            
+            guard let coreVersion = await modCore.fetchLocalCoreVersion() else { return }
+            guard let netVersion = await modCore.fetchNetVersion() else { return }
+            if coreVersion != netVersion {
+                Utils.sendNotification(
+                    title: "V2rayX",
+                    subtitle: "New version is available.",
+                    body: "\(coreVersion) to \(netVersion)"
+                )
+            }
+        }
     }
     
     private func openSystemSettingSecurity() {

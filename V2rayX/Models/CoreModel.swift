@@ -25,6 +25,11 @@ import Foundation
         didSet { store.set(coreGithub, forKey: kCoreGithub) }
     }
     
+    /// Use day for convenience
+    var coreCheckTime: Int {
+        didSet { store.set(coreCheckTime, forKey: kCoreCheckTime) }
+    }
+    
     // MARK: - Inbound
     
     var inPortHttp: String {
@@ -213,6 +218,8 @@ import Foundation
         corePath = store.string(forKey: kCorePath) ?? ""
         coreGithub = store.string(forKey: kCoreGithub) ?? ""
         
+        coreCheckTime = store.integer(forKey: kCoreCheckTime)
+        
         inPortHttp = store.string(forKey: kInboundPortHTTP)!
         inPortSocks = store.string(forKey: kInboundPortSOCKS)!
         inAllowLAN = store.bool(forKey: kInboundAllowLAN)
@@ -320,6 +327,7 @@ struct Host {
 // MARK: - Store Key
 fileprivate let kCorePath = "C/CorePath"
 fileprivate let kCoreGithub = "C/CoreGithub"
+fileprivate let kCoreCheckTime = "C/CoreCheckTime"
 
 fileprivate let kInboundPortHTTP = "C/Inbound/PortHTTP"
 fileprivate let kInboundPortSOCKS = "C/Inbound/PortSOCKS"

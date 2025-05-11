@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct V2rayXApp: App {
@@ -63,6 +64,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         
         ensureAppHomeExists()
+        
+        requestNotificationAuthorization()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -92,6 +95,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let path = appHomeDirectory().path()
         if !FileManager.default.fileExists(atPath: path) {
             try! FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        }
+    }
+    
+    private func requestNotificationAuthorization() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                DispatchQueue.main.async {
+                    NSApplication.shared.registerForRemoteNotifications()
+                }
+            }
         }
     }
 }
