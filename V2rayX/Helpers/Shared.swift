@@ -94,6 +94,18 @@ extension String {
     var nilValue: String? {
         return isEmpty ? nil : self
     }
+    
+    func extractString(start: String, end: String) -> String? {
+        let pattern = "(?<=\(start))[^\(end)]+(?=\(end))"
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+            return nil
+        }
+        let range = NSRange(self.startIndex..., in: self)
+        if let match = regex.firstMatch(in: self, range: range) {
+            return String(self[Range(match.range, in: self)!])
+        }
+        return nil
+    }
 }
 
 extension Optional<String> {

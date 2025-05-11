@@ -161,10 +161,12 @@ struct PopoverWindow: View {
     private func mapNode(link: String, active: String, idx: Int, rt: Int?) -> NodeItemView.Data {
         let name = link.components(separatedBy: "#")[1]
         let protocol0 = link.components(separatedBy: "://")[0]
+        let isIpv6 = isIpv6(link: link)
         return NodeItemView.Data(
             id: link,
             name: name,
             protocol0: protocol0,
+            isIpv6: isIpv6,
             selected: active == link,
             useDark: idx % 2 == 0,
             rt: rt
@@ -313,6 +315,14 @@ struct PopoverWindow: View {
             }
         }
     }
+    
+    private func isIpv6(link: String) -> Bool {
+        if link.contains("ipv6") {
+            return true
+        }
+        guard let address = link.extractString(start: "@", end: ":") else { return false }
+        return address.contains(":") // ipv6 has : char.
+    }
 }
 
 #Preview {
@@ -347,7 +357,7 @@ fileprivate struct NodeItemView: View {
                         titleTruncationMode = isHover ? .head : .tail
                     }
                 
-                Text(data.protocol0).foregroundColor(.secondary)
+                Text("\(data.protocol0) \(data.isIpv6 ? "ipv6" : "")").foregroundColor(.secondary)
                     .font(.system(size: 10, weight: .regular))
                     .lineLimit(1)
                     .truncationMode(.tail)
@@ -397,6 +407,7 @@ fileprivate struct NodeItemView: View {
         let id: String
         let name: String
         let protocol0: String
+        let isIpv6: Bool
         var selected: Bool
         var useDark: Bool
         var rt: Int?
