@@ -256,13 +256,21 @@ struct PopoverWindow: View {
     
     private func stop(_ onCompleted: @escaping ()->Void = {}) {
         Task {
-            await modCore.stop()
+            await clearProxyAndStopCore()
             onCompleted()
         }
     }
     
     private func closeApp() {
-        NSApplication.shared.terminate(nil)
+        Task {
+            await clearProxyAndStopCore()
+            NSApplication.shared.terminate(nil)
+        }
+    }
+    
+    private func clearProxyAndStopCore() async {
+        await modSetting.clearSystemProxy()
+        await modCore.stop()
     }
     
     private func openWindowAndActive(id: String) {

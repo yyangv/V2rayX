@@ -50,6 +50,11 @@ struct SGeneralPage: View {
                     Text("Enable Auto Update Nodes")
                     Text("When you open App, it will auto update nodes and test response time if needed.").font(.subheadline).foregroundColor(.secondary)
                 }
+                
+                Toggle(isOn: $m.clearSystemProxyAfterStop) {
+                    Text("Clear System Proxy After Stop")
+                    Text("Or system proxy will restore to previous settings.").font(.subheadline).foregroundColor(.secondary)
+                }
             }
             
             Section {

@@ -179,10 +179,7 @@ import Foundation
     }
     
     @MainActor func stop() async {
-        await Task(priority: .userInitiated) {
-            await CoreRunner.shared.stop()
-            await SystemProxy.shared.restore()
-        }.value
+        await CoreRunner.shared.stop()
     }
     
     @MainActor func fetchLocalCoreVersion() async -> String? {
